@@ -1,0 +1,9 @@
+{
+  "name": "reanswers",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "devDependencies": {
+    "concurrently": "^6.0.2"
+  }
+}
