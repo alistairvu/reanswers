@@ -2,7 +2,9 @@
   "name": "reanswers",
   "version": "1.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend start\""
+  },
   "devDependencies": {
     "concurrently": "^6.0.2"
   }
