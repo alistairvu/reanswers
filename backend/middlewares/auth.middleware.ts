@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from "jsonwebtoken"
 
-import User, { UserSchemaInterface } from "../modules/user/user.model"
+import User from "../modules/user/user.model"
 import HTTPError from "../httpError"
 
 // GET /api/auth/status
@@ -31,10 +31,10 @@ export const protect = async (
     const user = await User.findById(_id)
 
     if (!user) {
-      throw new HTTPError("Invalid request", 404)
+      throw new HTTPError("Invalid request", 401)
     }
 
-    res.json(req['user'])
+    req.user = user
     next()
   } catch (err) {
     next(new HTTPError(err.message, 403))

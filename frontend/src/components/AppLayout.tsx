@@ -1,17 +1,8 @@
 import AppHeader from "./AppHeader"
-import Helmet from "react-helmet"
 
-interface AppLayoutProps {
-  title: string
-}
-
-const AppLayout: React.FC<AppLayoutProps> = ({ children, title }) => {
+const AppLayout: React.FC = ({ children }) => {
   return (
     <>
-      <Helmet>
-        <title>{title} | reanswer</title>
-      </Helmet>
-
       <header>
         <AppHeader />
       </header>

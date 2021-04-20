@@ -1,16 +1,27 @@
-import Container from "react-bootstrap/Container"
 import AppLayout from "./components/AppLayout"
+import { Switch, Route } from "react-router-dom"
+import { HomePage, LoginPage } from "./pages"
+import { GuestRoute } from "./components/routes"
+import { useContext } from "react"
+import UserContext from "./context/userContext"
 
 const App: React.FC = () => {
+  const { isLoaded } = useContext(UserContext)
+
+  if (!isLoaded) {
+    return <AppLayout />
+  }
+
   return (
-    <AppLayout title="Home">
-      <Container className="text-center py-5">
-        <h1>Welcome to React!</h1>
-        <h3 style={{ fontSize: 30 }}>
-          Get started by editing{" "}
-          <code style={{ color: "red" }}>src/App.tsx</code>
-        </h3>
-      </Container>
+    <AppLayout>
+      <Switch>
+        <Route exact path="/">
+          <HomePage />
+        </Route>
+        <GuestRoute path="/login">
+          <LoginPage />
+        </GuestRoute>
+      </Switch>
     </AppLayout>
   )
 }

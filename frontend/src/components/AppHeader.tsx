@@ -2,12 +2,15 @@ import Navbar from "react-bootstrap/Navbar"
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav"
 import NavDropdown from "react-bootstrap/NavDropdown"
+import { LinkContainer } from "react-router-bootstrap"
 
 const AppHeader: React.FC = () => {
   return (
     <Navbar bg="dark" variant="dark" expand="md">
       <Container>
-        <Navbar.Brand>reanswer</Navbar.Brand>
+        <LinkContainer to="/">
+          <Navbar.Brand>reanswer</Navbar.Brand>
+        </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
