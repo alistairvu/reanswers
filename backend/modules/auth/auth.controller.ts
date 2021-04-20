@@ -83,6 +83,50 @@ export const loginUser = async (
   }
 }
 
+// GET /api/auth/refresh
+export const refreshAccessToken = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { refresh: refreshToken } = req.cookies
+    console.log(refreshToken)
+
+    if (!refreshToken) {
+      throw new HTTPError("No valid tokens found", 422)
+    }
+
+    let _id: string
+
+    try {
+      const payload = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      ) as {
+        _id: string
+      }
+      _id = payload._id
+    } catch (error) {
+      throw new HTTPError("Invalid token", 401)
+    }
+
+    const isRefreshToken = await setIsMember(`reanswers-${_id}`, refreshToken)
+    if (!isRefreshToken) {
+      throw new HTTPError("Token expired", 401)
+    }
+
+    const accessToken = genAccessToken(_id)
+
+    return res.send({
+      success: 1,
+      token: accessToken,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 // GET /api/auth/status
 export const getLoginStatus = async (
   req: Request,
