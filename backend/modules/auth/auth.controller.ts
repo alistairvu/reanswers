@@ -3,7 +3,8 @@ import HTTPError from "../../httpError"
 import { Request, Response, NextFunction } from "express"
 import argon from "argon2"
 import { genAccessToken, genRefreshToken } from "../../jwt"
-import { setAdd } from "../../redis"
+import { setAdd, setRemove, setIsMember } from "../../redis"
+import jwt from "jsonwebtoken"
 
 // POST /api/auth/signup
 export const createUser = async (
@@ -46,5 +47,104 @@ export const createUser = async (
 }
 
 // POST /api/auth/login
+export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email,  password } = req.body
+
+    const existingUser = await User.findOne({ email: email })
+    if (!existingUser) {
+      throw new HTTPError("User not found", 422)
+    }
+
+    const hashPassword = existingUser.password;
+    const comparedPassword = await argon.verify(hashPassword, password)
+    if (!comparedPassword) throw new HTTPError("Wrong password", 422)
+
+    const accessToken = genAccessToken(existingUser._id)
+    const refreshToken = genRefreshToken(existingUser._id)
+    await setAdd(`reanswers-${existingUser._id}`, refreshToken)
+
+    res.cookie("refresh", refreshToken, {
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 20 * 365 * 24 * 3600 * 1000,
+    })
+
+    res.send({ success: 1, user: existingUser, token: accessToken })
+  } catch (err) {
+    next(err)
+  }
+}
 
 // GET /api/auth/status
+export const getLoginStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { refreshToken } = req.cookies
+
+    if (!refreshToken) {
+      return res.send({ success: 1, loggedIn: 0 })
+    }
+
+    let _id: string
+
+    try {
+      const payload = jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+      ) as {
+        _id: string
+      }
+      _id = payload._id
+    } catch (error) {
+      return res.send({ success: 1, loggedIn: 0 })
+    }
+
+    const user = await User.findById(_id)
+    if (!user) {
+      return res.send({ success: 1, loggedIn: 0 })
+    }
+
+    const isRefreshToken = await setIsMember(
+      `reanswers-${_id}`,
+      refreshToken
+    )
+    if (!isRefreshToken) {
+      return res.send({ success: 1, loggedIn: 0 })
+    }
+
+    const accessToken = genAccessToken(_id)
+
+    return res.send({
+      success: 1,
+      loggedIn: 1,
+      user: { _id: user._id, email: user.email },
+      token: accessToken,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+// DELETE api/auth/logout
+export const logoutUser = async (req: Request, res: Response, next: any) => {
+  try {
+    const { refreshToken } = req.cookies
+    const { _id } = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET
+    ) as { _id: string }
+
+    await setRemove(`reanswers-${_id}`, refreshToken)
+
+    res.clearCookie("refreshToken")
+
+    res.send({ success: 1, loggedOut: 1 })
+  } catch (err) {
+    next(err)
+  }
+}
