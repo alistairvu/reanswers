@@ -17,7 +17,7 @@ export const createUser = async (
     const existingUser = await User.findOne({
       $or: [{ username: username }, { email: email }],
     })
-    if (!existingUser) {
+    if (existingUser) {
       throw new HTTPError("User already exists", 422)
     }
 
@@ -47,18 +47,24 @@ export const createUser = async (
 }
 
 // POST /api/auth/login
-export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { email,  password } = req.body
+    const { login, password } = req.body
 
-    const existingUser = await User.findOne({ email: email })
+    const existingUser = await User.findOne({
+      $or: [{ username: login }, { email: login }],
+    })
     if (!existingUser) {
-      throw new HTTPError("User not found", 422)
+      throw new HTTPError("User not found", 401)
     }
 
-    const hashPassword = existingUser.password;
+    const hashPassword = existingUser.password
     const comparedPassword = await argon.verify(hashPassword, password)
-    if (!comparedPassword) throw new HTTPError("Wrong password", 422)
+    if (!comparedPassword) throw new HTTPError("Wrong password", 401)
 
     const accessToken = genAccessToken(existingUser._id)
     const refreshToken = genRefreshToken(existingUser._id)
@@ -84,7 +90,8 @@ export const getLoginStatus = async (
   next: NextFunction
 ) => {
   try {
-    const { refreshToken } = req.cookies
+    const { refresh: refreshToken } = req.cookies
+    console.log(refreshToken)
 
     if (!refreshToken) {
       return res.send({ success: 1, loggedIn: 0 })
@@ -109,10 +116,7 @@ export const getLoginStatus = async (
       return res.send({ success: 1, loggedIn: 0 })
     }
 
-    const isRefreshToken = await setIsMember(
-      `reanswers-${_id}`,
-      refreshToken
-    )
+    const isRefreshToken = await setIsMember(`reanswers-${_id}`, refreshToken)
     if (!isRefreshToken) {
       return res.send({ success: 1, loggedIn: 0 })
     }
@@ -122,7 +126,7 @@ export const getLoginStatus = async (
     return res.send({
       success: 1,
       loggedIn: 1,
-      user: { _id: user._id, email: user.email },
+      user: user,
       token: accessToken,
     })
   } catch (err) {
