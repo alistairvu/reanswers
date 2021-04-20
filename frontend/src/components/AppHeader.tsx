@@ -9,7 +9,7 @@ const AppHeader: React.FC = () => {
     <Navbar bg="dark" variant="dark" expand="md">
       <Container>
         <LinkContainer to="/">
-          <Navbar.Brand>reanswer</Navbar.Brand>
+          <Navbar.Brand className="fw-bold">reanswer</Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
