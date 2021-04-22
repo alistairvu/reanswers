@@ -135,7 +135,6 @@ export const getLoginStatus = async (
 ) => {
   try {
     const { refresh: refreshToken } = req.cookies
-    console.log(refreshToken)
 
     if (!refreshToken) {
       return res.send({ success: 1, loggedIn: 0 })

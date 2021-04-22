@@ -1,12 +1,19 @@
 import AppLayout from "./components/AppLayout"
 import { Switch, Route } from "react-router-dom"
-import { HomePage, LoginPage,  SignupPage, NotificationsPage } from "./pages"
+import {
+  HomePage,
+  LoginPage,
+  SignupPage,
+  NotificationsPage,
+  AskPage,
+} from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
 import { useContext } from "react"
 import UserContext from "./context/userContext"
 
 const App: React.FC = () => {
   const { isLoaded } = useContext(UserContext)
+  console.log(isLoaded)
 
   if (!isLoaded) {
     return <AppLayout />
@@ -26,6 +33,9 @@ const App: React.FC = () => {
         </GuestRoute>
         <ProtectedRoute path="/notifications">
           <NotificationsPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/ask">
+          <AskPage />
         </ProtectedRoute>
       </Switch>
     </AppLayout>
