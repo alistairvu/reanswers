@@ -4,9 +4,34 @@ import mongoose from "mongoose"
 import HTTPError from "../../httpError"
 import { Request, Response, NextFunction } from "express"
 
-// GET (all)
+// GET /api/questions
 
-// GET (one)
+// GET /api/questions/:id
+export const showQuestion = async (req: Request, res: Response, next: any) => {
+  try {
+    const question = await Question.findById(req.params.id)
+      .select("-__v")
+      .populate("author", "username");
+    // .populate({
+    //   path: "likedBy",
+    //   populate: { path: "author", select: "username" },
+    //   select: "-__v",
+    // })
+    // .populate({
+    //     path: "comments",
+    //     populate: { path: "comment", select: "username content" },
+    //     select: "-__v",
+    //   })
+
+    if (!question) {
+      throw new HTTPError("No matching questions found", 404);
+    }
+
+    res.send({ success: 1, data: question });
+  } catch (err) {
+    next(err);
+  }
+};
 
 //POST /api/questions
 export const createQuestion = async (
