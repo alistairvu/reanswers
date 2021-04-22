@@ -82,7 +82,7 @@ const AuthSignUpForm: React.FC = () => {
       <Form.Group className="mb-3" controlId="password-confirmation">
         <Form.Control
           type="password"
-          placeholder="Enter your password"
+          placeholder="Confirm your password"
           {...register("passwordConfirmation", { required: true })}
         />
         {errors.passwordConfirmation && (
