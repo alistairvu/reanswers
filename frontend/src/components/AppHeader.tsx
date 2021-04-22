@@ -42,10 +42,24 @@ const AppHeader: React.FC = () => {
 
     return (
       <Nav className="ms-auto">
-        <LinkContainer to="/notifications">
-          <Nav.Link>Notifications</Nav.Link>
+        <LinkContainer to="/ask">
+          <Nav.Link className="me-2">
+            <i className="fas fa-plus" /> Ask
+          </Nav.Link>
         </LinkContainer>
-        <NavDropdown title={user.username} id="user-nav-dropdown">
+        <LinkContainer to="/notifications">
+          <Nav.Link className="me-2">
+            <i className="fas fa-bell" /> Notifications
+          </Nav.Link>
+        </LinkContainer>
+        <NavDropdown
+          title={
+            <>
+              <i className="fas fa-user" /> {user.username}
+            </>
+          }
+          id="user-nav-dropdown"
+        >
           <NavDropdown.Item onClick={handleLogOut}>Log Out</NavDropdown.Item>
         </NavDropdown>
       </Nav>

@@ -25,11 +25,12 @@ export const UserProvider: React.FC = ({ children }) => {
       try {
         const { data } = await axiosClient.get("/api/auth/status")
         if (data.success) {
-          setIsLoaded(true)
           if (data.loggedIn) {
+            console.log(data.user)
             setUser(data.user)
             window.localStorage.setItem("jwt", data.token)
           }
+          setIsLoaded(true)
         }
       } catch (err) {
         setIsLoaded(true)
