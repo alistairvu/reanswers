@@ -9,9 +9,6 @@ export const UserProvider: React.FC = ({ children }) => {
     _id: "",
     username: "",
     email: "",
-    questions: [] as string[],
-    answers: [] as string[],
-    bookmarks: [] as string[],
   })
 
   const clearUser = () => {
@@ -20,9 +17,6 @@ export const UserProvider: React.FC = ({ children }) => {
       _id: "",
       username: "",
       email: "",
-      questions: [] as string[],
-      answers: [] as string[],
-      bookmarks: [] as string[],
     })
   }
 
