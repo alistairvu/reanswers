@@ -67,7 +67,7 @@ const AuthSignUpForm: React.FC = () => {
         <Form.Control
           type="password"
           placeholder="Enter your Password"
-          {...register("password")}
+          {...register("password", { required: true })}
         />
       </Form.Group>
 
