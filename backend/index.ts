@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import connectDB from "./db"
 
 import authRouter from "./modules/auth/auth.router"
+import questionRouter from './modules/question/question.router'
 
 dotenv.config()
 connectDB()
@@ -17,6 +18,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use("/api/auth", authRouter)
+app.use("/api/questions", questionRouter)
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { status, message } = err
