@@ -181,13 +181,13 @@ export const getLoginStatus = async (
 // DELETE api/auth/logout
 export const logoutUser = async (req: Request, res: Response, next: any) => {
   try {
-    const { refreshToken } = req.cookies
-    const { _id } = jwt.verify(
+    const { refresh: refreshToken } = req.cookies
+    const payload = jwt.verify(
       refreshToken,
-      process.env.REFRESH_TOKEN_SECRET
+      process.env.REFRESH_TOKEN_SECRET as string
     ) as { _id: string }
 
-    await setRemove(`reanswers-${_id}`, refreshToken)
+    await setRemove(`reanswers-${payload._id}`, refreshToken)
 
     res.clearCookie("refreshToken")
 
