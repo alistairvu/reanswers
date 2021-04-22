@@ -13,7 +13,7 @@ const SignupPage: React.FC = () => {
       <Container className="mt-3">
         <Row>
           <Col className="d-none d-md-block mt-md-5" md={8}>
-            <h1 className="fw-bold">Welcome back to the land of curiosity.</h1>
+            <h1 className="fw-bold">Welcome to the land of curiosity.</h1>
             <h2>
               Ask the community. Answer with your knowledge. Connect with other
               curious minds.
