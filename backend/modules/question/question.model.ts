@@ -17,6 +17,10 @@ const QuestionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    body: {
+      type: String,
+      required: true,
+    },
     updates: {
       type: String,
       default: "",
@@ -52,7 +56,7 @@ const QuestionSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
-QuestionSchema.virtuals("answers", {
+QuestionSchema.virtual("answers", {
   ref: "answer",
   localField: "_id",
   foreignField: "question",
