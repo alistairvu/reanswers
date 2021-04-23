@@ -4,14 +4,14 @@ import ReactMarkdown from "react-markdown"
 
 const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const renderTagBadges = () => {
-    const tags = props.tags
-    return tags.map(tag => <Badge>{tag}</Badge>)
-  }
+    return props.tags.map(tag => <Badge key={tag._id} className="me-2" bg="primary">#{tag.title}</Badge>)
+  }  
 
   return (
     <Card>
       <Card.Body>
-        <Card.Title>{props.title}</Card.Title>
+        <Card.Title >{props.title}</Card.Title>
+        {/* <Card.Subtitle>{props.author.username}</Card.Subtitle> */}
         <ReactMarkdown>{props.body}</ReactMarkdown>
         <div className="tags">
             {renderTagBadges()}
