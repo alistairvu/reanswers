@@ -1,6 +1,8 @@
-import Question from "./question.model";
-import HTTPError from "../../httpError";
-import { Request, Response, NextFunction } from "express";
+import Question from "./question.model"
+import Tag from "../tag/tag.model"
+import mongoose from "mongoose"
+import HTTPError from "../../httpError"
+import { Request, Response, NextFunction } from "express"
 
 // GET /api/questions
 export const getQuestions = async (req: Request, res: Response, next: any) => {
@@ -96,46 +98,56 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
 export const createQuestion = async (
   req: Request,
   res: Response,
-  next: any
+  next: NextFunction
 ) => {
   try {
-    const { title, body, imageUrl, tags } = req.body;
-    const author = req.user._id;
+    const { title, body, imageUrl, tags } = req.body
+    const author = req.user._id
+    const tagIds: mongoose.Types.ObjectId[] = []
+
+    for (let tag of tags) {
+      await Tag.findOneAndUpdate(
+        { title: tag },
+        { $inc: { count: 1 } },
+        { upsert: true }
+      )
+      const createdTag = await Tag.findOne({ title: tag })
+      tagIds.push(createdTag._id)
+    }
+
     const question = await Question.create({
       title,
       body,
       imageUrl,
-      tags,
+      tags: tagIds,
       author,
-    });
+    })
 
-    res.send({ success: 1, data: question });
+    res.send({ success: 1, data: question })
   } catch (err) {
-    next(err);
+    next(err)
   }
-};
+}
 
 // DELETE /api/questions/:id
 export const deleteQuestion = async (
   req: Request,
   res: Response,
-  next: any
+  next: NextFunction
 ) => {
   try {
-    const question = await Question.findByIdAndDelete(req.params.id);
-    console.log(req.params.id);
-    console.log(question);
+    const question = await Question.findByIdAndDelete(req.params.id)
 
     if (!question) {
-      throw new HTTPError("No matching quetions found", 404);
+      throw new HTTPError("No matching quetions found", 404)
     }
 
     if (question.author.toString() !== req.user._id.toString()) {
-      throw new HTTPError("Action not allowed", 401);
+      throw new HTTPError("Action not allowed", 401)
     }
 
-    res.send({ success: 1, deleted: 1 });
+    res.send({ success: 1, deleted: 1 })
   } catch (err) {
-    next(err);
+    next(err)
   }
-};
+}

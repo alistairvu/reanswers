@@ -25,24 +25,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    questions: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "question",
-        },
-      ],
-      default: [],
-    },
-    answers: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "answer",
-        },
-      ],
-      default: [],
-    },
     bookmarks: {
       type: [
         {

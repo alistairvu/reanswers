@@ -12,9 +12,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   exact,
   path,
 }) => {
-  const { user } = useContext(UserContext)
+  const { user, isLoaded } = useContext(UserContext)
+  console.log(user)
 
-  if (!user._id) {
+  if (isLoaded && !user._id) {
     return <Redirect to="/login" />
   }
 
