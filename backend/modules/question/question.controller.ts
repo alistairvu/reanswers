@@ -3,6 +3,67 @@ import HTTPError from "../../httpError";
 import { Request, Response, NextFunction } from "express";
 
 // GET /api/questions
+export const getQuestions = async (req: Request, res: Response, next: any) => {
+  try {
+    const pageSize = Number(req.query.pageSize) || 10;
+    const pageNumber = Number(req.query.page) || 1;
+    const offset = pageSize * (pageNumber - 1);
+
+    const questionAggregate = await Question.aggregate([
+      {
+        $facet: {
+            questions: [
+            {
+              $sort: {
+                createdAt: -1,
+              },
+            },
+            { $skip: offset },
+            { $limit: pageSize },
+            {
+              $lookup: {
+                from: "users",
+                localField: "author",
+                foreignField: "_id",
+                as: "author",
+              },
+            },
+            {
+              $project: {
+                author: {
+                  password: 0,
+                  __v: 0,
+                },
+                __v: 0,
+                createdAt: 0,
+                updatedAt: 0,
+              },
+            },
+          ],
+          count: [
+            {
+              $count: "questionCount",
+            },
+          ],
+        },
+      },
+    ]);
+
+    const { questions, count } = questionAggregate[0];
+    const { questionCount } = count[0];
+    const pageCount = Math.ceil(questionCount / pageSize);
+    console.log(questionAggregate);
+    
+    res.send({
+      success: 1,
+      pageNumber: pageNumber,
+      pageCount: pageCount,
+      data: questions,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // GET /api/questions/:id
 export const showQuestion = async (req: Request, res: Response, next: any) => {
@@ -31,7 +92,7 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
   }
 };
 
-//POST /api/questions/create
+//POST /api/questions
 export const createQuestion = async (
   req: Request,
   res: Response,
