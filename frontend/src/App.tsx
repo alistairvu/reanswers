@@ -6,6 +6,7 @@ import {
   SignupPage,
   NotificationsPage,
   AskPage,
+  QuestionPage,
 } from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
 import { useContext } from "react"
