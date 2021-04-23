@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
 import { useContext, useState } from "react"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation, Link } from "react-router-dom"
 
 interface SignUpInterface {
   username: string
@@ -23,6 +23,9 @@ const AuthSignUpForm: React.FC = () => {
   } = useForm<SignUpInterface>()
   const { setUser } = useContext(UserContext)
   const history = useHistory()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const redirect = searchParams.get("redirect")
 
   const handleSignUp = async (signUpData: SignUpInterface) => {
     setSignUpError("")
@@ -37,7 +40,7 @@ const AuthSignUpForm: React.FC = () => {
         console.log(data)
         window.localStorage.setItem("jwt", data.token)
         setUser(data.user)
-        history.push("/")
+        history.push(redirect ? redirect : "/")
       }
     } catch (err) {
       console.log(err)
@@ -90,9 +93,16 @@ const AuthSignUpForm: React.FC = () => {
         </Alert>
       )}
 
-      <Button type="submit" variant="primary">
+      <Button type="submit" variant="primary" className="my-2">
         Sign Up
       </Button>
+
+      <p>
+        Already have an account?{" "}
+        <Link to={redirect ? `login?redirect=${redirect}` : "login"}>
+          Click here to log in.
+        </Link>
+      </p>
     </Form>
   )
 }

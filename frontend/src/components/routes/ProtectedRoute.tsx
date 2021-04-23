@@ -16,7 +16,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   console.log(user)
 
   if (isLoaded && !user._id) {
-    return <Redirect to="/login" />
+    return <Redirect to={`/login?redirect=${path}`} />
   }
 
   return (
