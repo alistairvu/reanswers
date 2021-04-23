@@ -7,7 +7,7 @@ export interface QuestionSchemaInterface extends mongoose.Document {
   imageUrl: string
   tags: mongoose.Types.ObjectId[]
   likedBy: mongoose.Types.ObjectId[]
-  author: mongoose.Types.ObjectId[]
+  author: mongoose.Types.ObjectId
   answers: mongoose.Types.ObjectId[]
 }
 

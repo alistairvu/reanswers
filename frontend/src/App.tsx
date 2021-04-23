@@ -32,6 +32,9 @@ const App: React.FC = () => {
         <GuestRoute path="/signup">
           <SignupPage />
         </GuestRoute>
+        <Route path="/questions/:id">
+          <QuestionPage />
+        </Route>
         <ProtectedRoute path="/notifications">
           <NotificationsPage />
         </ProtectedRoute>
