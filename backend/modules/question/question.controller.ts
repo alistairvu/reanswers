@@ -106,14 +106,16 @@ export const createQuestion = async (
     const author = req.user._id
     const tagIds: mongoose.Types.ObjectId[] = []
 
-    for (let tag of tags) {
-      await Tag.findOneAndUpdate(
-        { title: tag },
-        { $inc: { count: 1 } },
-        { upsert: true }
-      )
-      const createdTag = await Tag.findOne({ title: tag })
-      tagIds.push(createdTag._id)
+    if (tags) {
+      for (let tag of tags) {
+        await Tag.findOneAndUpdate(
+          { title: tag },
+          { $inc: { count: 1 } },
+          { upsert: true }
+        )
+        const createdTag = await Tag.findOne({ title: tag })
+        tagIds.push(createdTag._id)
+      }
     }
 
     const question = await Question.create({
