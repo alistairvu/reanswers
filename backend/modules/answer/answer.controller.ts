@@ -42,6 +42,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
 
     await answer.populate("author", "-password").execPopulate()
 
+    // TODO: change to callback
     const answerNotification = await Notification.create({
       title: `New answer for your question: ${question.title}`,
       body: `${req.user.username} answered your question!`,
@@ -68,7 +69,6 @@ export const deleteAnswer = async (req: Request, res: Response, next: any) => {
     if (!answer) {
       throw new HTTPError("No matching answers found!", 404)
     }
-
     await Answer.findByIdAndDelete(answerId)
     res.send({ success: 1, deleted: 1 })
   } catch (err) {
