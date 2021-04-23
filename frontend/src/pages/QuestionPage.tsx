@@ -1,6 +1,7 @@
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import Spinner from "react-bootstrap/Spinner"
 import axiosClient from "../api"
 import { useQuery } from "react-query"
 import { useParams } from "react-router-dom"
@@ -29,7 +30,13 @@ const QuestionPage: React.FC = () => {
       <Container className="mt-3">
         <Row>
           <Col xs={12} md={8}>
-            {/* <QuestionCard {...questionData} /> */}
+            {isLoading ? (
+              <div className="mt-4 text-center">
+                <Spinner animation="border" />
+              </div>
+            ) : (
+              <QuestionCard {...questionData} />
+            )}
           </Col>
         </Row>
       </Container>
