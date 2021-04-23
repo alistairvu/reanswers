@@ -49,6 +49,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
       subscribers: [question.author],
       link: `/questions/${questionId}`,
     })
+    console.log(answerNotification)
 
     req.io
       .to(question.author.toString())
