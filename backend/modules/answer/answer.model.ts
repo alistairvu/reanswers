@@ -3,8 +3,8 @@ import mongoose from "mongoose"
 export interface AnswerSchemaInterface extends mongoose.Document {
   title: string
   likedBy: mongoose.Types.ObjectId[]
-  author: mongoose.Types.ObjectId[]
-  question: mongoose.Types.ObjectId[]
+  author: mongoose.Types.ObjectId
+  question: mongoose.Types.ObjectId
 }
 
 const AnswerSchema = new mongoose.Schema(

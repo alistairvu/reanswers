@@ -9,6 +9,7 @@ import { Server } from "socket.io"
 import authRouter from "./modules/auth/auth.router"
 import questionRouter from "./modules/question/question.router"
 import tagRouter from "./modules/tag/tag.router"
+import answerRouter from './modules/answer/answer.router'
 
 dotenv.config()
 connectDB()
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV !== "production") {
 app.use("/api/auth", authRouter)
 app.use("/api/questions", questionRouter)
 app.use("/api/tags", tagRouter)
+app.use("/api/answers", answerRouter)
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { status, message } = err
