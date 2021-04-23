@@ -25,7 +25,11 @@ const QuestionPage: React.FC = () => {
 
   return (
     <>
-      <Container className="mt-3"></Container>
+      <Container className="mt-3">
+        <Row>
+          <Col xs={12} md={8}></Col>
+        </Row>
+      </Container>
     </>
   )
 }
