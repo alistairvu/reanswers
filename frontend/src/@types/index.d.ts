@@ -21,3 +21,11 @@ interface QuestionInterface {
   author: UserInterface
   createdAt: string
 }
+
+interface NotificationInterface {
+  _id: string
+  title: string
+  body: string
+  link: string
+  createdAt: string
+}
