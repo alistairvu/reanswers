@@ -6,6 +6,7 @@
     "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend start\""
   },
   "devDependencies": {
-    "concurrently": "^6.0.2"
+    "concurrently": "^6.0.2",
+    "prettier": "^2.2.1"
   }
 }

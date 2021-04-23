@@ -38,4 +38,16 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+UserSchema.virtual("questions", {
+  ref: "question",
+  localField: "_id",
+  foreignField: "author",
+})
+
+UserSchema.virtual("answers", {
+  ref: "answer",
+  localField: "_id",
+  foreignField: "author",
+})
+
 export default mongoose.model<UserSchemaInterface>("user", UserSchema)
