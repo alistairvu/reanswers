@@ -62,17 +62,16 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
 // DELETE /api/answers/:id
 export const deleteAnswer = async (req: Request, res: Response, next: any) => {
   try {
-      const answerId = req.params.id
-      const answer = await Answer.findById(answerId)   
-      
-      if (!answer) {
-        throw new HTTPError("No matching answers found!", 404)
-      }
-      
-      await Answer.findByIdAndDelete(answerId)
-      res.send({ success: 1, deleted: 1 })
-    } catch (err) {
-      next(err)
+    const answerId = req.params.id
+    const answer = await Answer.findById(answerId)
+
+    if (!answer) {
+      throw new HTTPError("No matching answers found!", 404)
     }
+
+    await Answer.findByIdAndDelete(answerId)
+    res.send({ success: 1, deleted: 1 })
+  } catch (err) {
+    next(err)
   }
 
