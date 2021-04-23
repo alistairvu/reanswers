@@ -20,7 +20,8 @@
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.1",
     "@types/morgan": "^1.9.2",
-    "@types/redis": "^2.8.28"
+    "@types/redis": "^2.8.28",
+    "prettier": "^2.2.1"
   },
   "scripts": {
     "dev": "nodemon"
