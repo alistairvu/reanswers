@@ -32,7 +32,7 @@ const AskPage: React.FC = () => {
   const handleAsk = async (questionData: QuestionDataInterface) => {
     console.log({ ...questionData, tags })
     try {
-      const { data } = await axiosClient.post("/api/questions", questionData)
+    const { data } = await axiosClient.post("/api/questions", { ...questionData, tags })
       if (data.success) {
         reset()
         setTags([])
