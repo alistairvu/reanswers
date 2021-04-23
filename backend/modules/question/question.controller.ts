@@ -54,7 +54,6 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
     const { questions, count } = questionAggregate[0];
     const { questionCount } = count[0];
     const pageCount = Math.ceil(questionCount / pageSize);
-    console.log(questionAggregate);
     
     res.send({
       success: 1,
