@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form"
 import { useState } from "react"
 import MarkdownEditor from "@uiw/react-markdown-editor"
 import AskTagsInput from "../components/ask/AskTagsInput"
+import axiosClient from "../api"
+import { useHistory, useLocation } from "react-router-dom"
 
 interface QuestionDataInterface {
   title: string
@@ -17,6 +19,10 @@ interface QuestionDataInterface {
 
 const AskPage: React.FC = () => {
   const [tags, setTags] = useState<string[]>([])
+  const history = useHistory()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const redirect = searchParams.get("redirect")
   const {
     register,
     handleSubmit,
@@ -26,10 +32,22 @@ const AskPage: React.FC = () => {
   } = useForm<QuestionDataInterface>()
   const markdownText = watch("body", "")
 
-  const handleAsk = (questionData: QuestionDataInterface) => {
+  const handleAsk = async (questionData: QuestionDataInterface) => {
     console.log({ ...questionData, tags })
-    reset()
-    setTags([])
+    try {
+    const { data } = await axiosClient.post("/api/questions", questionData)
+      if (data.success) {
+        console.log(data)
+        window.localStorage.setItem("jwt", data.token)
+        history.push(redirect ? redirect : "/")
+        console.log('success');
+        
+        reset()
+        setTags([])
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
