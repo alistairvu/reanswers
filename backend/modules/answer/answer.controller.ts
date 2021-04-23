@@ -27,8 +27,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
     try {
         
       const { questionId, content } = req.body
-      const question = await Question.findById(questionId)
-      console.log(questionId);      
+      const question = await Question.findById(questionId)   
       
       if (!question) {
         throw new HTTPError("No matching questions found!", 404)
@@ -54,6 +53,12 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
 export const deleteAnswer = async (req: Request, res: Response, next: any) => {
     try {
       const answerId = req.params.id
+      const answer = await Answer.findById(answerId)   
+      
+      if (!answer) {
+        throw new HTTPError("No matching answers found!", 404)
+      }
+      
       await Answer.findByIdAndDelete(answerId)
       res.send({ success: 1, deleted: 1 })
     } catch (err) {
