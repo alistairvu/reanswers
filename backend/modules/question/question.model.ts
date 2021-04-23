@@ -12,54 +12,53 @@ export interface QuestionSchemaInterface extends mongoose.Document {
 }
 
 const QuestionSchema = new mongoose.Schema(
-    {
-      title: {
-        type: String,
-        required: true,
-      },
-      updates: {
-        type: String,
-        default: "",
-      },
-      imageUrl: {
-        type: String,
-        default: "",
-      },
-      tags: {
-        type: [
-          {
-            type: mongoose.Types.ObjectId,
-            ref: "tag",
-          },
-        ],
-        default: [],
-      },
-      likedBy: {
-        type: [
-          {
-            type: mongoose.Types.ObjectId,
-            ref: "user",
-          },
-        ],
-        default: [],
-      },
-      author: {
-        type: mongoose.Types.ObjectId,
-        ref: "user",
-        required: true
-      },
-      answers:{
-        type: [
-          {
-            type: mongoose.Types.ObjectId,
-            ref: "answer",
-          },
-        ],
-        default: [],
-      }
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
-  )
+    updates: {
+      type: String,
+      default: "",
+    },
+    imageUrl: {
+      type: String,
+      default: "",
+    },
+    tags: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "tag",
+        },
+      ],
+      default: [],
+    },
+    likedBy: {
+      type: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "user",
+        },
+      ],
+      default: [],
+    },
+    author: {
+      type: mongoose.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
+  },
+  { timestamps: true }
+)
 
+QuestionSchema.virtuals("answers", {
+  ref: "answer",
+  localField: "_id",
+  foreignField: "question",
+})
 
-export default mongoose.model<QuestionSchemaInterface>("question", QuestionSchema)
+export default mongoose.model<QuestionSchemaInterface>(
+  "question",
+  QuestionSchema
+)
