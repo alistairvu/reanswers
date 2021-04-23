@@ -6,6 +6,7 @@ import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
 import { useContext, useState } from "react"
 import { useHistory, useLocation, Link } from "react-router-dom"
+import useSocket from "../../hooks/useSocket"
 
 interface SignUpInterface {
   username: string
@@ -24,6 +25,7 @@ const AuthSignUpForm: React.FC = () => {
   const { setUser } = useContext(UserContext)
   const history = useHistory()
   const location = useLocation()
+  const socket = useSocket()
   const searchParams = new URLSearchParams(location.search)
   const redirect = searchParams.get("redirect")
 
@@ -40,6 +42,7 @@ const AuthSignUpForm: React.FC = () => {
         console.log(data)
         window.localStorage.setItem("jwt", data.token)
         setUser(data.user)
+        socket.emit("join-room", data.user._id)
         history.push(redirect ? redirect : "/")
       }
     } catch (err) {

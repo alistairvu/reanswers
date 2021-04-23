@@ -10,4 +10,26 @@ axiosClient.interceptors.request.use((config) => {
   return config
 })
 
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config
+
+    if (error.response.status === 403 && !originalRequest._retry) {
+      originalRequest._retry = true
+
+      const { data } = await axiosClient.get("/api/auth/refresh")
+      if (data.success) {
+        const { token: newToken } = data
+
+        window.localStorage.setItem("jwt", newToken)
+        originalRequest.headers.authorization = "Bearer " + newToken
+        return await axiosClient(originalRequest)
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)
+
 export default axiosClient

@@ -9,12 +9,19 @@ import {
   QuestionPage,
 } from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import UserContext from "./context/userContext"
+import useSocket from "./hooks/useSocket"
 
 const App: React.FC = () => {
   const { isLoaded } = useContext(UserContext)
-  console.log(isLoaded)
+  const socket = useSocket()
+
+  useEffect(() => {
+    socket.on("connected", () => {
+      console.log("Connected!")
+    })
+  }, [socket])
 
   if (!isLoaded) {
     return <AppLayout />

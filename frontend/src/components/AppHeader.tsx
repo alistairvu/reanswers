@@ -7,15 +7,18 @@ import { useContext } from "react"
 import UserContext from "../context/userContext"
 import { useHistory } from "react-router-dom"
 import axiosClient from "../api"
+import useSocket from "../hooks/useSocket"
 
 const AppHeader: React.FC = () => {
   const { user, clearUser, isLoaded } = useContext(UserContext)
   const history = useHistory()
+  const socket = useSocket()
 
   const handleLogOut = async () => {
     try {
       const { data } = await axiosClient.delete("/api/auth/logout")
       if (data.success) {
+        socket.emit("leave-room", user._id)
         clearUser()
         history.push("/login")
       }
