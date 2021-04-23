@@ -9,6 +9,8 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
   try {
     const limit = Number(req.query.limit) || 10
     const skip = Number(req.query.skip) || 0
+    const sort = req.query.sort
+    const order = sort == "top" ? { likedBy: -1 } : { createdAt: -1 }
 
     const questionAggregate = await Question.aggregate([
       {
@@ -16,7 +18,7 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
           questions: [
             {
               $sort: {
-                createdAt: -1,
+                ...order,
               },
             },
             { $skip: skip },
@@ -30,6 +32,14 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
               },
             },
             {
+              $lookup: {
+                from: "tags",
+                localField: "tags",
+                foreignField: "_id",
+                as: "tags",
+              },
+            },
+            {
               $project: {
                 author: {
                   password: 0,
@@ -38,6 +48,9 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
                 __v: 0,
                 createdAt: 0,
                 updatedAt: 0,
+                tags: {
+                  __v: 0,
+                },
               },
             },
           ],
@@ -89,6 +102,7 @@ export const createQuestion = async (
 ) => {
   try {
     const { title, body, imageUrl, tags } = req.body
+    console.log({ title, body })
     const author = req.user._id
     const tagIds: mongoose.Types.ObjectId[] = []
 
@@ -126,7 +140,7 @@ export const deleteQuestion = async (
     const question = await Question.findByIdAndDelete(req.params.id)
 
     if (!question) {
-      throw new HTTPError("No matching quetions found", 404)
+      throw new HTTPError("No matching questions found", 404)
     }
 
     if (question.author.toString() !== req.user._id.toString()) {
