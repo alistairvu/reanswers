@@ -19,4 +19,5 @@ interface QuestionInterface {
   title: string
   body: string
   author: UserInterface
+  createdAt: string
 }
