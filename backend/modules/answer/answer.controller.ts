@@ -25,30 +25,6 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
 
 // POST /api/answers
 export const createAnswer = async (req: Request, res: Response, next: any) => {
-<<<<<<< HEAD
-    try {
-        
-      const { questionId, content } = req.body
-      const question = await Question.findById(questionId)   
-      
-      if (!question) {
-        throw new HTTPError("No matching questions found!", 404)
-      }
-  
-      const answer = await Answer.create({
-        content: content,
-        question: questionId,
-        author: req.user._id,
-      })
-  
-      await answer.populate("author").execPopulate()
-  
-      req.io.to(questionId).emit("new-answer", answer)
-  
-      res.send({ success: 1, data: answer })
-    } catch (err) {
-      next(err)
-=======
   try {
     const { questionId, content } = req.body
     const question = await Question.findById(questionId)
@@ -56,7 +32,6 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
 
     if (!question) {
       throw new HTTPError("No matching questions found!", 404)
->>>>>>> main
     }
 
     const answer = await Answer.create({
@@ -86,8 +61,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
 
 // DELETE /api/answers/:id
 export const deleteAnswer = async (req: Request, res: Response, next: any) => {
-<<<<<<< HEAD
-    try {
+  try {
       const answerId = req.params.id
       const answer = await Answer.findById(answerId)   
       
@@ -100,13 +74,5 @@ export const deleteAnswer = async (req: Request, res: Response, next: any) => {
     } catch (err) {
       next(err)
     }
-=======
-  try {
-    const answerId = req.params.id
-    await Answer.findByIdAndDelete(answerId)
-    res.send({ success: 1, deleted: 1 })
-  } catch (err) {
-    next(err)
->>>>>>> main
   }
 }
