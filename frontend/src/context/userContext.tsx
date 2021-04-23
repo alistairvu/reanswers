@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from "react"
 import axiosClient from "../api"
+import useSocket from "../hooks/useSocket"
 
 const UserContext = createContext(null)
 
@@ -10,6 +11,7 @@ export const UserProvider: React.FC = ({ children }) => {
     username: "",
     email: "",
   })
+  const socket = useSocket()
 
   const clearUser = () => {
     window.localStorage.removeItem("jwt")
@@ -29,6 +31,7 @@ export const UserProvider: React.FC = ({ children }) => {
             console.log(data.user)
             setUser(data.user)
             window.localStorage.setItem("jwt", data.token)
+            socket.emit("join-room", data.user._id)
           }
           setIsLoaded(true)
         }

@@ -9,7 +9,7 @@ import { Server } from "socket.io"
 import authRouter from "./modules/auth/auth.router"
 import questionRouter from "./modules/question/question.router"
 import tagRouter from "./modules/tag/tag.router"
-import answerRouter from './modules/answer/answer.router'
+import answerRouter from "./modules/answer/answer.router"
 
 dotenv.config()
 connectDB()
@@ -38,6 +38,20 @@ app.use("/api/answers", answerRouter)
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { status, message } = err
   res.status(status || 500).send({ success: 0, message: message })
+})
+
+io.on("connection", (socket) => {
+  socket.emit("connected")
+
+  socket.on("join-room", (userId) => {
+    socket.join(userId)
+    console.log(`Joined room ${userId}`)
+  })
+
+  socket.on("leave-room", (userId) => {
+    socket.leave(userId)
+    console.log(`Left room ${userId}`)
+  })
 })
 
 server.listen(port, () => console.log(`Listening on port ${port}`))
