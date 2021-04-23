@@ -21,7 +21,6 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
       <Card.Body>
         <Card.Title className="display-6">{props.title}</Card.Title>
         <Card.Subtitle className="mb-2">{props.author.username}</Card.Subtitle>
-        {/* <Card.Subtitle className="mb-3 text-muted"><em>{format(new Date(props.createdAt), 'dd-MM-yyyy kk:mm ')}</em></Card.Subtitle> */}
         <Card.Subtitle className="mb-3 text-muted"><em>{formatDate()}</em></Card.Subtitle>
         <ReactMarkdown>{props.body}</ReactMarkdown>
         <div className="tags">
