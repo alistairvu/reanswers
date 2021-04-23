@@ -107,6 +107,7 @@ export const createQuestion = async (
     const author = req.user._id
     const tagIds: mongoose.Types.ObjectId[] = []
 
+    // TODO: Convert to promiseAll
     if (tags) {
       for (let tag of tags) {
         await Tag.findOneAndUpdate(

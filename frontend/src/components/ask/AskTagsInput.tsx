@@ -44,12 +44,12 @@ const AskTagsInput: React.FC<AskTagsInputProps> = ({ tags, setTags }) => {
       {tags.map((tag, index) => (
         <Badge
           bg="primary"
-          className="me-1 mt-2"
+          className="me-2 mt-2"
           key={index}
           style={{ cursor: "pointer" }}
           onClick={() => removeFromTags(tag)}
         >
-          #{tag}{" "}
+          #{tag}
         </Badge>
       ))}
     </>
