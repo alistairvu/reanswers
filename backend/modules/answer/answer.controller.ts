@@ -28,7 +28,6 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
   try {
     const { questionId, content } = req.body
     const question = await Question.findById(questionId)
-    console.log(questionId)
 
     if (!question) {
       throw new HTTPError("No matching questions found!", 404)

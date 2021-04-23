@@ -11,6 +11,7 @@ import questionRouter from "./modules/question/question.router"
 import tagRouter from "./modules/tag/tag.router"
 import answerRouter from "./modules/answer/answer.router"
 import notificationRouter from "./modules/notification/notification.router"
+import likeRouter from './modules/like/like.router'
 
 dotenv.config()
 connectDB()
@@ -36,6 +37,7 @@ app.use("/api/questions", questionRouter)
 app.use("/api/tags", tagRouter)
 app.use("/api/answers", answerRouter)
 app.use("/api/notifications", notificationRouter)
+app.use("/api/likes", likeRouter)
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { status, message } = err
