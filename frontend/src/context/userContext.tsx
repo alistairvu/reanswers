@@ -42,7 +42,7 @@ export const UserProvider: React.FC = ({ children }) => {
     }
 
     getStatus()
-  }, [])
+  }, [socket])
 
   return (
     <UserContext.Provider value={{ isLoaded, user, setUser, clearUser }}>
