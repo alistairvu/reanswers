@@ -29,7 +29,7 @@ const QuestionPage: React.FC = () => {
       <Container className="mt-3">
         <Row>
           <Col xs={12} md={8}>
-            <QuestionCard {...questionData} />
+            {/* <QuestionCard {...questionData} /> */}
           </Col>
         </Row>
       </Container>

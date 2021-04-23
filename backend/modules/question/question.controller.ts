@@ -82,7 +82,8 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
   try {
     const question = await Question.findById(req.params.id)
       .select("-__v")
-      .populate("author", "username")
+      .populate("author", "username email")
+      .populate("tags", "title")
 
     if (!question) {
       throw new HTTPError("No matching questions found", 404)
