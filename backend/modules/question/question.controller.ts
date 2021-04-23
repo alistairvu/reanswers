@@ -7,21 +7,20 @@ import { Request, Response, NextFunction } from "express"
 // GET /api/questions
 export const getQuestions = async (req: Request, res: Response, next: any) => {
   try {
-    const pageSize = Number(req.query.pageSize) || 10;
-    const pageNumber = Number(req.query.page) || 1;
-    const offset = pageSize * (pageNumber - 1);
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
 
     const questionAggregate = await Question.aggregate([
       {
         $facet: {
-            questions: [
+          questions: [
             {
               $sort: {
                 createdAt: -1,
               },
             },
-            { $skip: offset },
-            { $limit: pageSize },
+            { $skip: skip },
+            { $limit: limit },
             {
               $lookup: {
                 from: "users",
@@ -49,49 +48,38 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
           ],
         },
       },
-    ]);
+    ])
 
-    const { questions, count } = questionAggregate[0];
-    const { questionCount } = count[0];
-    const pageCount = Math.ceil(questionCount / pageSize);
-    
+    const { questions, count } = questionAggregate[0]
+    const { questionCount } = count[0]
+
     res.send({
       success: 1,
-      pageNumber: pageNumber,
-      pageCount: pageCount,
       data: questions,
-    });
+      questionCount: questionCount,
+      nextCursor: skip + limit,
+    })
   } catch (err) {
-    next(err);
+    next(err)
   }
-};
+}
 
 // GET /api/questions/:id
 export const showQuestion = async (req: Request, res: Response, next: any) => {
   try {
     const question = await Question.findById(req.params.id)
       .select("-__v")
-      .populate("author", "username");
-    // .populate({
-    //   path: "likedBy",
-    //   populate: { path: "author", select: "username" },
-    //   select: "-__v",
-    // })
-    // .populate({
-    //     path: "comments",
-    //     populate: { path: "comment", select: "username content" },
-    //     select: "-__v",
-    //   })
+      .populate("author", "username")
 
     if (!question) {
-      throw new HTTPError("No matching questions found", 404);
+      throw new HTTPError("No matching questions found", 404)
     }
 
-    res.send({ success: 1, data: question });
+    res.send({ success: 1, data: question })
   } catch (err) {
-    next(err);
+    next(err)
   }
-};
+}
 
 //POST /api/questions
 export const createQuestion = async (
