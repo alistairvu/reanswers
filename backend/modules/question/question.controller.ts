@@ -105,19 +105,26 @@ export const createQuestion = async (
     const { title, body, imageUrl, tags } = req.body
     console.log({ title, body })
     const author = req.user._id
-    const tagIds: mongoose.Types.ObjectId[] = []
+    let tagIds: mongoose.Types.ObjectId[] = []
 
-    // TODO: Convert to promiseAll
     if (tags) {
-      for (let tag of tags) {
+      const tagPromises: Promise<mongoose.Types.ObjectId>[] = []
+
+      const createTag = async (tag: string) => {
         await Tag.findOneAndUpdate(
           { title: tag },
           { $inc: { count: 1 } },
           { upsert: true }
         )
         const createdTag = await Tag.findOne({ title: tag })
-        tagIds.push(createdTag._id)
+        return createdTag._id
       }
+
+      for (let tag of tags) {
+        tagPromises.push(createTag(tag))
+      }
+
+      tagIds = await Promise.all(tagPromises)
     }
 
     const question = await Question.create({

@@ -1,12 +1,16 @@
 import Question from "../question/question.model"
 import Answer from "../answer/answer.model"
-import Like from "./like.model"
+import Bookmark from "./bookmark.model"
 import { Response, Request } from "express"
 import HTTPError from "../../httpError"
 
-// POST /api/likes
+// POST /api/bookmarks
 
-export const handleLike = async (req: Request, res: Response, next: any) => {
+export const handleBookmark = async (
+  req: Request,
+  res: Response,
+  next: any
+) => {
   try {
     const { questionId, answerId } = req.body
 
@@ -16,7 +20,7 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
         throw new HTTPError("No matching questions found!", 404)
       }
 
-      const existingLike = await Like.findOne({
+      const existingLike = await Bookmark.findOne({
         questionId: questionId,
         userId: req.user._id,
       })
@@ -24,17 +28,17 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
         await existingLike.remove()
         return res.send({
           success: 1,
-          message: `User ${req.user._id} unliked question ${questionId}`,
+          message: `User ${req.user._id} added question ${questionId} to their bookmarks`,
         })
       }
-      const data = Like.create({
+      const data = await Bookmark.create({
         userId: req.user._id,
         questionId: questionId,
       })
       return res.send({
         success: 1,
         data: data,
-        message: `User ${req.user._id} liked question ${questionId}`,
+        message: `User ${req.user._id} added question ${questionId} to their bookmarks`,
       })
     }
 
@@ -43,7 +47,7 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
       if (!answer) {
         throw new HTTPError("No matching answers found", 404)
       }
-      const existingLike = await Like.findOne({
+      const existingLike = await Bookmark.findOne({
         answerId: answerId,
         userId: req.user._id,
       })
@@ -51,17 +55,17 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
         await existingLike.remove()
         return res.send({
           success: 1,
-          message: `User ${req.user._id} unliked answer ${answerId}`,
+          message: `User ${req.user._id} removed answer ${answerId} to their bookmarks`,
         })
       }
-      const data = Like.create({
+      const data = await Bookmark.create({
         userId: req.user._id,
         answerId: answerId,
       })
       return res.send({
         success: 1,
         data: data,
-        message: `User ${req.user._id} liked answer ${answerId}`,
+        message: `User ${req.user._id} added answer ${answerId} to their bookmarks`,
       })
     }
   } catch (err) {
