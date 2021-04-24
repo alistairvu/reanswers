@@ -1,12 +1,12 @@
 import mongoose from "mongoose"
 
-export interface LikeSchemaInterface extends mongoose.Document {
+export interface BookmarkSchemaInterface extends mongoose.Document {
   questionId: mongoose.Types.ObjectId
   answerId: mongoose.Types.ObjectId
   userId: mongoose.Types.ObjectId
 }
 
-const LikeSchema = new mongoose.Schema({
+const BookmarkSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Types.ObjectId,
     required: true,
@@ -25,4 +25,7 @@ const LikeSchema = new mongoose.Schema({
   },
 })
 
-export default mongoose.model<LikeSchemaInterface>("like", LikeSchema)
+export default mongoose.model<BookmarkSchemaInterface>(
+  "bookmark",
+  BookmarkSchema
+)

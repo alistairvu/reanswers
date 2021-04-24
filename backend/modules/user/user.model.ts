@@ -25,15 +25,6 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    bookmarks: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "question",
-        },
-      ],
-      default: [],
-    },
   },
   { timestamps: true }
 )
@@ -48,6 +39,12 @@ UserSchema.virtual("answers", {
   ref: "answer",
   localField: "_id",
   foreignField: "author",
+})
+
+UserSchema.virtual("bookmarks", {
+  ref: "bookmark",
+  localField: "_id",
+  foreignField: "userId",
 })
 
 export default mongoose.model<UserSchemaInterface>("user", UserSchema)
