@@ -16,7 +16,7 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
 
     const answers = await Answer.find({
       question: questionId,
-    })
+    }).populate("author", "-password")
     res.send({ success: 1, data: answers })
   } catch (err) {
     next(err)
