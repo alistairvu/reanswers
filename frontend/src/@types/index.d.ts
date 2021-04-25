@@ -29,3 +29,12 @@ interface NotificationInterface {
   link: string
   createdAt: string
 }
+
+interface AnswerInterface {
+  _id: string
+  content: string
+  question: string
+  author: UserInterface
+  createdAt: string
+  updatedAt: string
+}
