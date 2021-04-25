@@ -9,10 +9,10 @@ import UserContext from "../../context/userContext"
 
 const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const [likeBtnColor, setLikeBtnColor] = useState(
-    props.likes.length ? "#fff" : "grey"
+    props.likes.length ? "red" : "grey"
   )
   const user = useContext(UserContext)
-  console.log(user.user._id)
+  console.log(user.user._id === props.author._id)
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
@@ -37,10 +37,10 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
       })
       if (data.success) {
         console.log(data)
-        if (likeBtnColor === "#fff") {
+        if (likeBtnColor === "red") {
           setLikeBtnColor("grey")
         } else {
-          setLikeBtnColor("#fff")
+          setLikeBtnColor("red")
         }
       }
     } catch (err) {
@@ -57,25 +57,24 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
           <em>{formatDate()}</em>
         </Card.Subtitle>
         <ReactMarkdown>{props.body}</ReactMarkdown>
-        <Row>
-          <Col xs={10}>
-            <div className="tags">{renderTagBadges()}</div>
-          </Col>
+        <div className="tags">{renderTagBadges()}</div>
+        <div className="mt-3">
           {user.user._id && (
-            <Col>
-              <i
-                id="likeBtn"
-                className="fas fa-heart"
-                style={{
-                  cursor: "pointer",
-                  fontSize: "30px",
-                  color: likeBtnColor,
-                }}
-                onClick={handleLike}
-              />
-            </Col>
+            <i
+              className="fas fa-heart"
+              style={{
+                cursor: "pointer",
+                fontSize: "25px",
+                color: likeBtnColor,
+              }}
+              onClick={handleLike}
+            />
           )}
-        </Row>
+          <i
+            className="fas fa-pen ms-3"
+            style={{ fontSize: "25px", color: "#fff" }}
+          ></i>
+        </div>
       </Card.Body>
     </Card>
   )
