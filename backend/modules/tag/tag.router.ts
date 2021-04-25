@@ -1,9 +1,9 @@
 import express from "express"
-import { getTopTags } from "./tag.controller"
-import { protect } from "../../middlewares/auth.middleware"
+import { getTopTags, getQuestionsByTag } from "./tag.controller"
 
 const router = express.Router()
 
 router.route("/top").get(getTopTags)
+router.route("/:id").get(getQuestionsByTag)
 
 export default router
