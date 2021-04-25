@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useForm } from "react-hook-form"
 import { useParams } from "react-router-dom"
+import { useQueryClient } from "react-query"
 import MarkdownEditor from "@uiw/react-markdown-editor"
 import axiosClient from "../../api"
 
@@ -18,6 +19,7 @@ const AnswerForm: React.FC = () => {
     reset,
   } = useForm<AnswerDataInterface>()
   const markdownContent = watch("content", "")
+  const queryClient = useQueryClient()
   const { id: questionId } = useParams<{ id: string }>()
 
   const handleAnswer = async (answerData: AnswerDataInterface) => {
@@ -28,6 +30,7 @@ const AnswerForm: React.FC = () => {
       })
       if (data.success) {
         console.log(data)
+        queryClient.invalidateQueries(["answers", questionId])
         reset()
       }
     } catch (err) {

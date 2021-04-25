@@ -37,17 +37,19 @@ const QuestionPage: React.FC = () => {
     <>
       <Container className="mt-3">
         <Row>
-          <Col xs={12} md={8}>
+          <Col xs={12} lg={8}>
             {isLoading ? (
               <div className="mt-4 text-center">
                 <Spinner animation="border" />
               </div>
             ) : (
               <>
-                <div className="mb-2">
+                <div className="mt-4">
                   <QuestionCard {...questionData} />
                 </div>
-                {user._id ? <AnswerForm /> : <AnswerLoginCard />}
+                <div className="my-4">
+                  {user._id ? <AnswerForm /> : <AnswerLoginCard />}
+                </div>
                 <AnswerCardList />
               </>
             )}
