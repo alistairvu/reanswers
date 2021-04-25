@@ -1,1 +1,1 @@
-web: ts-node --files ./backend
+web: cd backend && ts-node --files .
