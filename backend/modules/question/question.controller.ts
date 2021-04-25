@@ -86,7 +86,7 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
       .populate("tags", "title")
       .populate({
         path: "likes",
-        match: {userId: req.user._id}
+        match: { userId: req.user ? req.user._id : null },
       })
 
     if (!question) {
