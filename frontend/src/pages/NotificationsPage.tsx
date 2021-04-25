@@ -18,7 +18,7 @@ const NotificationsPage: React.FC = () => {
     })
     console.log(data)
     if (data.success) {
-      return data.notifications
+      return data
     }
   }
 
@@ -69,12 +69,14 @@ const NotificationsPage: React.FC = () => {
               <div className="mt-2">
                 {notificationData.pages.map((page, index) => (
                   <Fragment key={index}>
-                    {page.map((notification: NotificationInterface) => (
-                      <NotificationCard
-                        key={notification._id}
-                        {...notification}
-                      />
-                    ))}
+                    {page.notifications.map(
+                      (notification: NotificationInterface) => (
+                        <NotificationCard
+                          key={notification._id}
+                          {...notification}
+                        />
+                      )
+                    )}
                   </Fragment>
                 ))}
               </div>

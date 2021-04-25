@@ -4,7 +4,7 @@ import Alert from "react-bootstrap/Alert"
 import { useForm } from "react-hook-form"
 import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
-import { useContext, useState } from "react"
+import { useContext, useState, useEffect } from "react"
 import { useHistory, useLocation, Link } from "react-router-dom"
 import useSocket from "../../hooks/useSocket"
 
@@ -17,6 +17,7 @@ interface SignUpInterface {
 
 const AuthSignUpForm: React.FC = () => {
   const [signUpError, setSignUpError] = useState<string>("")
+  const [isSigningUp, setIsSigningUp] = useState<boolean>(false)
   const {
     register,
     handleSubmit,
@@ -37,8 +38,10 @@ const AuthSignUpForm: React.FC = () => {
     }
 
     try {
+      setIsSigningUp(true)
       const { data } = await axiosClient.post("/api/auth/signup", signUpData)
       if (data.success) {
+        setIsSigningUp(false)
         console.log(data)
         window.localStorage.setItem("jwt", data.token)
         setUser(data.user)
@@ -46,10 +49,15 @@ const AuthSignUpForm: React.FC = () => {
         history.push(redirect ? redirect : "/")
       }
     } catch (err) {
+      setIsSigningUp(false)
       console.log(err)
       setSignUpError(err.response.data.message)
     }
   }
+
+  useEffect(() => {
+    setSignUpError("")
+  }, [])
 
   return (
     <Form onSubmit={handleSubmit(handleSignUp)}>
