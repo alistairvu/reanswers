@@ -12,59 +12,18 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
     const sort = req.query.sort
     const order = sort == "top" ? { likedBy: -1 } : { createdAt: -1 }
 
-    const questionAggregate = await Question.aggregate([
-      {
-        $facet: {
-          questions: [
-            {
-              $sort: {
-                ...order,
-              },
-            },
-            { $skip: skip },
-            { $limit: limit },
-            {
-              $lookup: {
-                from: "users",
-                localField: "author",
-                foreignField: "_id",
-                as: "author",
-              },
-            },
-            {
-              $lookup: {
-                from: "tags",
-                localField: "tags",
-                foreignField: "_id",
-                as: "tags",
-              },
-            },
-            {
-              $project: {
-                author: {
-                  password: 0,
-                  __v: 0,
-                },
-                __v: 0,
-                createdAt: 0,
-                updatedAt: 0,
-                tags: {
-                  __v: 0,
-                },
-              },
-            },
-          ],
-          count: [
-            {
-              $count: "questionCount",
-            },
-          ],
-        },
-      },
+    const [questions, questionCount] = await Promise.all([
+      Question.find({})
+        .sort(order)
+        .select("-__v")
+        .populate("author", "username email")
+        .populate("tags", "title")
+        .populate({
+          path: "likes",
+          match: { userId: req.user ? req.user._id : null },
+        }),
+      Question.find({}).countDocuments(),
     ])
-
-    const { questions, count } = questionAggregate[0]
-    const { questionCount } = count[0]
 
     res.send({
       success: 1,
