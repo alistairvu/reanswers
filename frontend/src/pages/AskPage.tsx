@@ -32,7 +32,10 @@ const AskPage: React.FC = () => {
   const handleAsk = async (questionData: QuestionDataInterface) => {
     console.log({ ...questionData, tags })
     try {
-    const { data } = await axiosClient.post("/api/questions", { ...questionData, tags })
+      const { data } = await axiosClient.post("/api/questions", {
+        ...questionData,
+        tags,
+      })
       if (data.success) {
         reset()
         setTags([])
@@ -49,7 +52,7 @@ const AskPage: React.FC = () => {
 
       <Container className="mt-3">
         <Row>
-          <Col xs={12} md={{ span: 8, offset: 2 }} lg={{ span: 6, offset: 3 }}>
+          <Col xs={12} md={{ span: 8, offset: 2 }}>
             <h1>Ask</h1>
             <Card>
               <Card.Body>

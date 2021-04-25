@@ -5,14 +5,31 @@ import NavDropdown from "react-bootstrap/NavDropdown"
 import { LinkContainer } from "react-router-bootstrap"
 import { useContext } from "react"
 import UserContext from "../context/userContext"
-import { useHistory } from "react-router-dom"
+import { useHistory, useLocation } from "react-router-dom"
 import axiosClient from "../api"
 import useSocket from "../hooks/useSocket"
+import { useState, useEffect } from "react"
 
 const AppHeader: React.FC = () => {
   const { user, clearUser, isLoaded } = useContext(UserContext)
   const history = useHistory()
   const socket = useSocket()
+  const [hasNewNotification, setHasNewNotification] = useState(false)
+  const location = useLocation()
+
+  useEffect(() => {
+    socket.on("notification", () => {
+      if (location.pathname !== "/notifications") {
+        setHasNewNotification(true)
+      }
+    })
+  }, [socket, location.pathname])
+
+  useEffect(() => {
+    if (location.pathname === "/notifications") {
+      setHasNewNotification(false)
+    }
+  }, [location.pathname])
 
   const handleLogOut = async () => {
     try {
@@ -52,7 +69,12 @@ const AppHeader: React.FC = () => {
         </LinkContainer>
         <LinkContainer to="/notifications">
           <Nav.Link className="me-2">
-            <i className="fas fa-bell" /> Notifications
+            <i className="fas fa-bell" /> Notifications{" "}
+            {hasNewNotification && (
+              <span style={{ color: "red", fontWeight: 600, fontSize: 16 }}>
+                •
+              </span>
+            )}
           </Nav.Link>
         </LinkContainer>
         <NavDropdown
