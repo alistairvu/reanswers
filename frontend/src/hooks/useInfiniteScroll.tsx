@@ -2,7 +2,8 @@ import { useEffect } from "react"
 import { debounce } from "underscore"
 
 const useInfiniteScroll = (fetchNext: Function, hasNextPage: boolean) => {
-  const debouncedFetchNext = debounce(fetchNext, 1000)
+  const debouncedFetchNext = debounce(() => fetchNext(), 1000)
+  console.log({ hasNextPage })
 
   useEffect(() => {
     const handleScroll = () => {
