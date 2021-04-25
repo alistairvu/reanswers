@@ -12,6 +12,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
     props.likes.length ? "#fff" : "grey"
   )
   const user = useContext(UserContext)
+  console.log(user.user._id)
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
@@ -60,18 +61,20 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
           <Col xs={10}>
             <div className="tags">{renderTagBadges()}</div>
           </Col>
-          <Col>
-            <i
-              id="likeBtn"
-              className="fas fa-heart"
-              style={{
-                cursor: "pointer",
-                fontSize: "30px",
-                color: likeBtnColor,
-              }}
-              onClick={handleLike}
-            />
-          </Col>
+          {user.user._id && (
+            <Col>
+              <i
+                id="likeBtn"
+                className="fas fa-heart"
+                style={{
+                  cursor: "pointer",
+                  fontSize: "30px",
+                  color: likeBtnColor,
+                }}
+                onClick={handleLike}
+              />
+            </Col>
+          )}
         </Row>
       </Card.Body>
     </Card>
