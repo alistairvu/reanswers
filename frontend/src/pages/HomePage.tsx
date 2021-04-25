@@ -5,6 +5,7 @@ import { useInfiniteQuery } from "react-query"
 import { HomeQuestionCard } from "../components/home"
 import { Fragment } from "react"
 import axiosClient from "../api"
+import useInfiniteScroll from "../hooks/useInfiniteScroll"
 
 const HomePage: React.FC = () => {
   const getQuestions = async ({ pageParam = 0 }) => {
@@ -19,18 +20,21 @@ const HomePage: React.FC = () => {
     }
   }
 
-  const { data: questionData, isLoading } = useInfiniteQuery(
-    "home_questions",
-    getQuestions,
-    {
-      getNextPageParam: (lastPage: any) => {
-        if (lastPage.nextCursor > lastPage.notificationCount) {
-          return false
-        }
-        return lastPage.nextCursor
-      },
-    }
-  )
+  const {
+    data: questionData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery("home_questions", getQuestions, {
+    getNextPageParam: (lastPage: any) => {
+      if (lastPage.nextCursor > lastPage.questionCount) {
+        return false
+      }
+      return lastPage.nextCursor
+    },
+  })
+
+  useInfiniteScroll(fetchNextPage, hasNextPage)
 
   console.log({ questionData, isLoading })
 
@@ -44,13 +48,25 @@ const HomePage: React.FC = () => {
             <Spinner animation="border" />
           </div>
         ) : (
-          questionData.pages.map((page, index) => (
-            <Fragment key={index}>
-              {page.data.map((question: QuestionInterface) => (
-                <HomeQuestionCard {...question} key={question._id} />
-              ))}
-            </Fragment>
-          ))
+          <>
+            {questionData.pages.map((page, index) => (
+              <Fragment key={index}>
+                {page.data.map((question: QuestionInterface) => (
+                  <HomeQuestionCard {...question} key={question._id} />
+                ))}
+              </Fragment>
+            ))}
+
+            {hasNextPage ? (
+              <div className="my-2 text-center">
+                <Spinner animation="border" />
+              </div>
+            ) : (
+              <div className="my-2 text-center">
+                <p>No more questions.</p>
+              </div>
+            )}
+          </>
         )}
       </Container>
     </>
