@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend start\""
+    "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend start\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd frontend && yarn && yarn run build && cd .."
   },
   "devDependencies": {
     "concurrently": "^6.0.2",
