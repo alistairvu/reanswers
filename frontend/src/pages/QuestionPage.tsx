@@ -8,7 +8,11 @@ import { useParams } from "react-router-dom"
 import QuestionCard from "../components/question/QuestionCard"
 import { useContext } from "react"
 import UserContext from "../context/userContext"
-import { AnswerForm, AnswerLoginCard } from "../components/answer"
+import {
+  AnswerForm,
+  AnswerLoginCard,
+  AnswerCardList,
+} from "../components/answer"
 
 const QuestionPage: React.FC = () => {
   const { id: questionId } = useParams<{ id: string }>()
@@ -44,6 +48,7 @@ const QuestionPage: React.FC = () => {
                   <QuestionCard {...questionData} />
                 </div>
                 {user._id ? <AnswerForm /> : <AnswerLoginCard />}
+                <AnswerCardList />
               </>
             )}
           </Col>

@@ -104,8 +104,13 @@ const AuthSignUpForm: React.FC = () => {
         </Alert>
       )}
 
-      <Button type="submit" variant="primary" className="my-2">
-        Sign Up
+      <Button
+        type="submit"
+        variant="primary"
+        className="my-2"
+        disabled={isSigningUp}
+      >
+        {isSigningUp ? "Signing Up..." : "Sign Up"}
       </Button>
 
       <p>
