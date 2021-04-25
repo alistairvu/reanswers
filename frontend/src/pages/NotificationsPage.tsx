@@ -4,8 +4,9 @@ import Row from "react-bootstrap/Row"
 import Spinner from "react-bootstrap/Spinner"
 import AppHelmet from "../components/AppHelmet"
 import axiosClient from "../api"
-import { useInfiniteQuery } from "react-query"
-import { Fragment } from "react"
+import { useInfiniteQuery, useQueryClient } from "react-query"
+import { Fragment, useEffect } from "react"
+import useSocket from "../hooks/useSocket"
 import NotificationCard from "../components/notification/NotificationCard"
 
 const NotificationsPage: React.FC = () => {
@@ -20,6 +21,22 @@ const NotificationsPage: React.FC = () => {
       return data.notifications
     }
   }
+
+  const socket = useSocket()
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    socket.on("notification", (notification: NotificationInterface) => {
+      console.log("New notification!")
+      const newNotificationPage = [notification]
+      queryClient.setQueryData("notifications", (data: any) => {
+        return {
+          pages: [newNotificationPage, ...data.pages],
+          pageParams: data.pageParams,
+        }
+      })
+    })
+  }, [socket, queryClient])
 
   const { data: notificationData, isLoading } = useInfiniteQuery(
     "notifications",

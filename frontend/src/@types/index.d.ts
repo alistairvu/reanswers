@@ -37,3 +37,12 @@ interface LikeInterface {
   questionId: string
   answerId: string
 }
+
+interface AnswerInterface {
+  _id: string
+  content: string
+  question: string
+  author: UserInterface
+  createdAt: string
+  updatedAt: string
+}
