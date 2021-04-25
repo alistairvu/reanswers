@@ -59,12 +59,13 @@ export const loginUser = async (
       $or: [{ username: login }, { email: login }],
     })
     if (!existingUser) {
-      throw new HTTPError("User not found", 401)
+      throw new HTTPError("Wrong login/password combination", 401)
     }
 
     const hashPassword = existingUser.password
     const comparedPassword = await argon.verify(hashPassword, password)
-    if (!comparedPassword) throw new HTTPError("Wrong password", 401)
+    if (!comparedPassword)
+      throw new HTTPError("Wrong login/password combination", 401)
 
     const accessToken = genAccessToken(existingUser._id)
     const refreshToken = genRefreshToken(existingUser._id)

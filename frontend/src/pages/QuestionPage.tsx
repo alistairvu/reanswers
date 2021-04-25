@@ -6,9 +6,13 @@ import axiosClient from "../api"
 import { useQuery } from "react-query"
 import { useParams } from "react-router-dom"
 import QuestionCard from "../components/question/QuestionCard"
+import { useContext } from "react"
+import UserContext from "../context/userContext"
+import { AnswerForm, AnswerLoginCard } from "../components/answer"
 
 const QuestionPage: React.FC = () => {
   const { id: questionId } = useParams<{ id: string }>()
+  const { user } = useContext(UserContext)
 
   const fetchQuestion = async () => {
     const { data } = await axiosClient.get(`/api/questions/${questionId}`)
@@ -35,7 +39,12 @@ const QuestionPage: React.FC = () => {
                 <Spinner animation="border" />
               </div>
             ) : (
-              <QuestionCard {...questionData} />
+              <>
+                <div className="mb-2">
+                  <QuestionCard {...questionData} />
+                </div>
+                {user._id ? <AnswerForm /> : <AnswerLoginCard />}
+              </>
             )}
           </Col>
         </Row>

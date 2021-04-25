@@ -1,5 +1,5 @@
 import AppLayout from "./components/AppLayout"
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, useLocation } from "react-router-dom"
 import {
   HomePage,
   LoginPage,
@@ -16,6 +16,8 @@ import useSocket from "./hooks/useSocket"
 const App: React.FC = () => {
   const { isLoaded } = useContext(UserContext)
   const socket = useSocket()
+  const location = useLocation()
+  console.log(location.pathname)
 
   useEffect(() => {
     socket.on("connected", () => {
