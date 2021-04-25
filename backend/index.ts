@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import connectDB from "./db"
 import morgan from "morgan"
 import { Server } from "socket.io"
+import path from "path"
 
 import authRouter from "./modules/auth/auth.router"
 import questionRouter from "./modules/question/question.router"
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 
 app.use(express.json())
 app.use(cookieParser())
+
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"))
 }
@@ -40,6 +42,14 @@ app.use("/api/answers", answerRouter)
 app.use("/api/notifications", notificationRouter)
 app.use("/api/likes", likeRouter)
 app.use("/api/bookmarks", bookmarkRouter)
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/build")))
+
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"))
+  )
+}
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   const { status, message } = err
