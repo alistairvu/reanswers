@@ -53,13 +53,20 @@ const QuestionSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: {virtuals: true}, toObject: {virtuals: true} }
 )
 
 QuestionSchema.virtual("answers", {
   ref: "answer",
   localField: "_id",
   foreignField: "question",
+})
+
+QuestionSchema.virtual("likes", {
+  ref: "like",
+  localField: "_id",
+  foreignField: "questionId",
+  justOne: false
 })
 
 export default mongoose.model<QuestionSchemaInterface>(

@@ -84,6 +84,10 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
       .select("-__v")
       .populate("author", "username email")
       .populate("tags", "title")
+      .populate({
+        path: "likes",
+        match: {userId: req.user._id}
+      })
 
     if (!question) {
       throw new HTTPError("No matching questions found", 404)

@@ -20,6 +20,7 @@ interface QuestionInterface {
   body: string
   author: UserInterface
   createdAt: string
+  likes: LikeInterface[]
 }
 
 interface NotificationInterface {
@@ -28,6 +29,13 @@ interface NotificationInterface {
   body: string
   link: string
   createdAt: string
+}
+
+interface LikeInterface {
+  _id: string
+  userId: string
+  questionId: string
+  answerId: string
 }
 
 interface AnswerInterface {
