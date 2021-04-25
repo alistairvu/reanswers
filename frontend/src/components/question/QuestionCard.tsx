@@ -2,17 +2,17 @@ import Badge from "react-bootstrap/Badge"
 import Card from "react-bootstrap/Card"
 import ReactMarkdown from "react-markdown"
 import { formatDistance } from "date-fns"
-import { Col, Row } from "react-bootstrap"
 import { useState, useContext } from "react"
 import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
+import QuestionUpdateForm from "./QuestionUpdateForm"
 
 const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const [likeBtnColor, setLikeBtnColor] = useState(
     props.likes.length ? "red" : "grey"
   )
+  const [isUpdateFormShown, setIsUpdateFormShown] = useState(false)
   const user = useContext(UserContext)
-  console.log(user.user._id === props.author._id)
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
@@ -48,6 +48,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
     }
   }
 
+
   return (
     <Card>
       <Card.Body>
@@ -70,10 +71,14 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
               onClick={handleLike}
             />
           )}
-          <i
-            className="fas fa-pen ms-3"
-            style={{ fontSize: "25px", color: "#fff" }}
-          ></i>
+          {user.user._id === props.author._id && (
+            <i
+              className="fas fa-pen ms-3"
+              style={{ fontSize: "25px", color: "#fff", cursor: "pointer" }}
+              onClick={() => setIsUpdateFormShown(prev => !prev)}
+            ></i>
+          )}
+          {isUpdateFormShown && <QuestionUpdateForm/> }
         </div>
       </Card.Body>
     </Card>

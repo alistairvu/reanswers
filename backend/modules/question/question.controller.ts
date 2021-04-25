@@ -167,3 +167,28 @@ export const deleteQuestion = async (
     next(err)
   }
 }
+
+// POST /api/questions/:id
+export const updateQuestion = async (
+  req: Request,
+  res: Response,
+  next: any
+) => {
+  try {
+    const { content } = req.body
+
+    const question = await Question.findById(req.params.id)
+    if (!question) {
+      throw new HTTPError("No matching questions found", 404)
+    }
+
+    if (!content.trim()) {
+      throw new HTTPError("No update content inserted", 422)
+    }
+
+    const updatedQuestion = await Question.updateOne({_id: req.params.id},   {updates: content})
+    res.send({success: 1, data: updatedQuestion})
+  } catch (err) {
+    next(err)
+  }
+}
