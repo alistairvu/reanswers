@@ -6,6 +6,7 @@ import axiosClient from "../api"
 import { useQuery } from "react-query"
 import { useParams } from "react-router-dom"
 import QuestionCard from "../components/question/QuestionCard"
+import AppHelmet from "../components/AppHelmet"
 import { useContext } from "react"
 import UserContext from "../context/userContext"
 import {
@@ -35,6 +36,8 @@ const QuestionPage: React.FC = () => {
 
   return (
     <>
+      <AppHelmet title={isLoading ? "Question" : questionData.title} />
+
       <Container className="mt-3">
         <Row>
           <Col xs={12} lg={8}>

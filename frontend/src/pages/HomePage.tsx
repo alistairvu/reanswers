@@ -1,7 +1,9 @@
 import Container from "react-bootstrap/Container"
 import Spinner from "react-bootstrap/Spinner"
 import AppHelmet from "../components/AppHelmet"
-import { useInfiniteQuery } from "react-query"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
+import { useInfiniteQuery, useQuery } from "react-query"
 import { HomeQuestionCard } from "../components/home"
 import { Fragment } from "react"
 import axiosClient from "../api"
@@ -20,6 +22,13 @@ const HomePage: React.FC = () => {
     }
   }
 
+  const getTopTags = async () => {
+    const { data } = await axiosClient.get("/api/tags/top")
+    if (data.success) {
+      return data.tags
+    }
+  }
+
   const {
     data: questionData,
     isLoading,
@@ -34,40 +43,61 @@ const HomePage: React.FC = () => {
     },
   })
 
-  useInfiniteScroll(fetchNextPage, hasNextPage)
+  const { data: tagData, isLoading: isTagLoading } = useQuery(
+    "home_tags",
+    getTopTags
+  )
 
-  console.log({ questionData, isLoading })
+  useInfiniteScroll(fetchNextPage, hasNextPage)
 
   return (
     <>
       <AppHelmet title="Home" />
 
       <Container className="py-3">
-        {isLoading ? (
-          <div className="text-center">
-            <Spinner animation="border" />
-          </div>
-        ) : (
-          <>
-            {questionData.pages.map((page, index) => (
-              <Fragment key={index}>
-                {page.data.map((question: QuestionInterface) => (
-                  <HomeQuestionCard {...question} key={question._id} />
-                ))}
-              </Fragment>
-            ))}
-
-            {hasNextPage ? (
-              <div className="my-2 text-center">
+        <Row>
+          <Col className="d-none d-lg-block" lg={2}>
+            <h5>Hot Tags</h5>
+            <ol>
+              {isTagLoading ? (
+                <div className="my-2 text-center">
+                  <Spinner animation="border" />
+                </div>
+              ) : (
+                tagData.map((tag: TagInterface) => (
+                  <li key={tag._id}>{tag.title}</li>
+                ))
+              )}
+            </ol>
+          </Col>
+          <Col xs={12} lg={8}>
+            {isLoading ? (
+              <div className="text-center">
                 <Spinner animation="border" />
               </div>
             ) : (
-              <div className="my-2 text-center">
-                <p>No more questions.</p>
-              </div>
+              <>
+                {questionData.pages.map((page, index) => (
+                  <Fragment key={index}>
+                    {page.data.map((question: QuestionInterface) => (
+                      <HomeQuestionCard {...question} key={question._id} />
+                    ))}
+                  </Fragment>
+                ))}
+
+                {hasNextPage ? (
+                  <div className="my-2 text-center">
+                    <Spinner animation="border" />
+                  </div>
+                ) : (
+                  <div className="my-2 text-center">
+                    <p>No more questions.</p>
+                  </div>
+                )}
+              </>
             )}
-          </>
-        )}
+          </Col>
+        </Row>
       </Container>
     </>
   )
