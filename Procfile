@@ -1,1 +1,1 @@
-web: cd backend && yarn && cd .. && ts-node --files ./backend
+web: ts-node --files ./backend
