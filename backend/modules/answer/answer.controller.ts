@@ -10,6 +10,8 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
     const questionId = req.params.id
     const question = await Question.findById(questionId)
 
+    const limit = Number(req.query.limit) || 10
+
     if (!question) {
       throw new HTTPError("No matching questions found", 404)
     }
