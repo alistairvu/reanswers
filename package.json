@@ -4,6 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "concurrently \"yarn --cwd backend dev\" \"yarn --cwd frontend start\"",
+    "heroku-prebuild": "cd backend && yarn && cd ..",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd frontend && yarn && yarn run build && cd .."
   },
   "devDependencies": {
