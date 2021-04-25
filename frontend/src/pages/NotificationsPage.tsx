@@ -8,6 +8,7 @@ import { useInfiniteQuery, useQueryClient } from "react-query"
 import { Fragment, useEffect } from "react"
 import useSocket from "../hooks/useSocket"
 import NotificationCard from "../components/notification/NotificationCard"
+import useInfiniteScroll from "../hooks/useInfiniteScroll"
 
 const NotificationsPage: React.FC = () => {
   const getNotifications = async ({ pageParam = 0 }) => {
@@ -38,20 +39,21 @@ const NotificationsPage: React.FC = () => {
     })
   }, [socket, queryClient])
 
-  const { data: notificationData, isLoading } = useInfiniteQuery(
-    "notifications",
-    getNotifications,
-    {
-      getNextPageParam: (lastPage: any) => {
-        if (lastPage.nextCursor > lastPage.notificationCount) {
-          return false
-        }
-        return lastPage.nextCursor
-      },
-    }
-  )
+  const {
+    data: notificationData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery("notifications", getNotifications, {
+    getNextPageParam: (lastPage: any) => {
+      if (lastPage.nextCursor > lastPage.notificationCount) {
+        return false
+      }
+      return lastPage.nextCursor
+    },
+  })
 
-  console.log({ isLoading, notificationData })
+  useInfiniteScroll(fetchNextPage, hasNextPage)
 
   return (
     <>
@@ -79,6 +81,16 @@ const NotificationsPage: React.FC = () => {
                     )}
                   </Fragment>
                 ))}
+
+                {hasNextPage ? (
+                  <div className="my-2 text-center">
+                    <Spinner animation="border" />
+                  </div>
+                ) : (
+                  <div className="my-2 text-center">
+                    <p>No more notifications.</p>
+                  </div>
+                )}
               </div>
             )}
           </Col>

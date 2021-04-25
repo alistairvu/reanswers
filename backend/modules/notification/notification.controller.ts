@@ -8,8 +8,8 @@ export const getNotifications = async (
   next: NextFunction
 ) => {
   try {
-    const limit = Number(req.params.limit) || 10
-    const skip = Number(req.params.skip) || 0
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
 
     const notifications = await Notification.find({ subscribers: req.user._id })
       .sort({ createdAt: -1 })
