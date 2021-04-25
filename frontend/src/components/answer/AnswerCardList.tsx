@@ -1,5 +1,8 @@
+import Spinner from "react-bootstrap/Spinner"
 import axiosClient from "../../api"
 import { useInfiniteQuery } from "react-query"
+import { Fragment } from "react"
+import AnswerCard from "./AnswerCard"
 import { useParams } from "react-router-dom"
 
 const AnswerCardList: React.FC = () => {
@@ -33,7 +36,25 @@ const AnswerCardList: React.FC = () => {
     }
   )
 
-  return <div></div>
+  if (isLoading) {
+    return (
+      <div className="mt-2 text-center">
+        <Spinner animation="border" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-2">
+      {answerData.pages.map((page, index) => (
+        <Fragment key={index}>
+          {page.data.map((answer: AnswerInterface) => (
+            <AnswerCard key={answer._id} {...answer} />
+          ))}
+        </Fragment>
+      ))}
+    </div>
+  )
 }
 
 export default AnswerCardList
