@@ -1,8 +1,8 @@
 import { useEffect } from "react"
 import { debounce } from "underscore"
 
-const useInfiniteScroll = (fetchNext: Function, hasNextPage: boolean) => {
-  const debouncedFetchNext = debounce(() => fetchNext(), 1000)
+const useInfiniteScroll = (fetchNextPage: Function, hasNextPage: boolean) => {
+  const debouncedFetchNextPage = debounce(() => fetchNextPage(), 1000)
   console.log({ hasNextPage })
 
   useEffect(() => {
@@ -14,14 +14,14 @@ const useInfiniteScroll = (fetchNext: Function, hasNextPage: boolean) => {
         return
       } else {
         if (hasNextPage) {
-          debouncedFetchNext()
+          debouncedFetchNextPage()
         }
       }
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [debouncedFetchNext, hasNextPage])
+  }, [debouncedFetchNextPage, hasNextPage])
 }
 
 export default useInfiniteScroll

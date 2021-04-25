@@ -61,7 +61,7 @@ const NotificationsPage: React.FC = () => {
 
       <Container className="mt-3">
         <Row>
-          <Col xs={12} md={8}>
+          <Col xs={12} lg={8}>
             <h1 className="fw-bold">Notifications</h1>
             {isLoading ? (
               <div className="mt-2 text-center">
