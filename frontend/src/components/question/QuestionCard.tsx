@@ -8,8 +8,8 @@ import UserContext from "../../context/userContext"
 import QuestionUpdateForm from "./QuestionUpdateForm"
 
 const QuestionCard: React.FC<QuestionInterface> = (props) => {
-  const [likeBtnColor, setLikeBtnColor] = useState(
-    props.likes.length ? "red" : "grey"
+  const [isLiked, setIsLiked] = useState(
+    props.likes.length > 0
   )
   const [isUpdateFormShown, setIsUpdateFormShown] = useState(false)
   const user = useContext(UserContext)
@@ -31,19 +31,16 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const handleLike = async () => {
     console.log(UserContext)
     try {
+      setIsLiked(prev => !prev)
       const { data } = await axiosClient.post("/api/likes", {
         questionId: props._id,
         userId: user.user._id,
       })
       if (data.success) {
         console.log(data)
-        if (likeBtnColor === "red") {
-          setLikeBtnColor("grey")
-        } else {
-          setLikeBtnColor("red")
-        }
       }
     } catch (err) {
+      setIsLiked(prev => !prev)
       console.log(err)
     }
   }
@@ -66,7 +63,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
               style={{
                 cursor: "pointer",
                 fontSize: "25px",
-                color: likeBtnColor,
+                color: isLiked ? "#d9534f" : "#adb5bd",
               }}
               onClick={handleLike}
             />
@@ -74,7 +71,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
           {user.user._id === props.author._id && (
             <i
               className="fas fa-pen ms-3"
-              style={{ fontSize: "25px", color: "#fff", cursor: "pointer" }}
+              style={{ fontSize: "25px", color: "#adb5bd", cursor: "pointer" }}
               onClick={() => setIsUpdateFormShown(prev => !prev)}
             ></i>
           )}

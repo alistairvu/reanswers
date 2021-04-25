@@ -11,7 +11,7 @@ import { protect, checkUser } from "../../middlewares/auth.middleware"
 const router = express.Router()
 
 router.route("/:id").delete(protect, deleteQuestion)
-router.route("/").post(protect, createQuestion).get(getQuestions)
+router.route("/").post(protect, createQuestion).get(checkUser,getQuestions)
 router.route("/:id").get(checkUser, showQuestion)
 router.route("/:id").post(protect, updateQuestion)
 

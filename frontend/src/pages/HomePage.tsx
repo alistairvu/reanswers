@@ -7,6 +7,7 @@ import { Fragment } from "react"
 import axiosClient from "../api"
 
 const HomePage: React.FC = () => {
+
   const getQuestions = async ({ pageParam = 0 }) => {
     const { data } = await axiosClient.get(`/api/questions`, {
       params: {
