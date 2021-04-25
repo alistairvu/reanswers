@@ -8,6 +8,7 @@ import axiosClient from "../api"
 import useInfiniteScroll from "../hooks/useInfiniteScroll"
 
 const HomePage: React.FC = () => {
+
   const getQuestions = async ({ pageParam = 0 }) => {
     const { data } = await axiosClient.get(`/api/questions`, {
       params: {
