@@ -11,15 +11,29 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
     const question = await Question.findById(questionId)
 
     const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
 
     if (!question) {
       throw new HTTPError("No matching questions found", 404)
     }
 
-    const answers = await Answer.find({
-      question: questionId,
-    }).populate("author", "-password")
-    res.send({ success: 1, data: answers })
+    const [answers, answerCount] = await Promise.all([
+      Answer.find({
+        question: questionId,
+      })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("author", "-password"),
+      Answer.find({ question: questionId }).countDocuments(),
+    ])
+
+    res.send({
+      success: 1,
+      data: answers,
+      answerCount: answerCount,
+      nextCursor: limit + skip,
+    })
   } catch (err) {
     next(err)
   }
