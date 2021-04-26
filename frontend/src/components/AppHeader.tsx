@@ -9,6 +9,7 @@ import { useHistory, useLocation } from "react-router-dom"
 import axiosClient from "../api"
 import useSocket from "../hooks/useSocket"
 import { useState, useEffect } from "react"
+import AppSearchBar from "./AppSearchBar"
 
 const AppHeader: React.FC = () => {
   const { user, clearUser, isLoaded } = useContext(UserContext)
@@ -50,6 +51,7 @@ const AppHeader: React.FC = () => {
     if (!user._id) {
       return (
         <Nav className="ms-auto">
+          <AppSearchBar />
           <LinkContainer to="/signup">
             <Nav.Link>Sign Up</Nav.Link>
           </LinkContainer>
@@ -62,6 +64,7 @@ const AppHeader: React.FC = () => {
 
     return (
       <Nav className="ms-auto">
+        <AppSearchBar />
         <LinkContainer to="/ask">
           <Nav.Link className="me-2">
             <i className="fas fa-plus" /> Ask
