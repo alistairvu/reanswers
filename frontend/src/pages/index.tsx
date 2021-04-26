@@ -4,6 +4,7 @@ import NotificationsPage from "./NotificationsPage"
 import SignupPage from "./SignupPage"
 import AskPage from "./AskPage"
 import QuestionPage from "./QuestionPage"
+import SearchPage from "./SearchPage"
 
 export {
   HomePage,
@@ -12,4 +13,5 @@ export {
   SignupPage,
   AskPage,
   QuestionPage,
+  SearchPage,
 }

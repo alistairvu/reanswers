@@ -53,7 +53,7 @@ export const checkUser = async (
 
     const token = req.headers.authorization.split(" ")[1]
 
-    if (!token) {
+    if (!token || token === "undefined") {
       req.user = undefined
       return next()
     }

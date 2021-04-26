@@ -3,6 +3,7 @@ import {
   createQuestion,
   deleteQuestion,
   getQuestions,
+  getTopQuestions,
   showQuestion,
   updateQuestion,
 } from "./question.controller"
@@ -10,9 +11,12 @@ import { protect, checkUser } from "../../middlewares/auth.middleware"
 
 const router = express.Router()
 
-router.route("/:id").delete(protect, deleteQuestion)
-router.route("/").post(protect, createQuestion).get(checkUser,getQuestions)
-router.route("/:id").get(checkUser, showQuestion)
-router.route("/:id").post(protect, updateQuestion)
+router.route("/").post(protect, createQuestion).get(checkUser, getQuestions)
+router.route("/top").get(checkUser, getTopQuestions)
+router
+  .route("/:id")
+  .get(checkUser, showQuestion)
+  .delete(protect, deleteQuestion)
+  .post(protect, updateQuestion)
 
 export default router

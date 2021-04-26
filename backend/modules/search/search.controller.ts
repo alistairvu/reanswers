@@ -31,7 +31,10 @@ export const searchQuestionsByKeyword = async (
           match: { userId: req.user ? req.user._id : null },
         }),
       Question.find({
-        text: { $regex: `${keyword}`, $options: "i" },
+        $or: [
+          { title: { $regex: `${keyword}`, $options: "i" } },
+          { body: { $regex: `${keyword}`, $options: "i" } },
+        ],
       }).countDocuments(),
     ])
 
