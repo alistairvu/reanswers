@@ -52,7 +52,7 @@ const AnswerCardList: React.FC = () => {
     <div className="mt-2">
       {answerData.pages.map((page, index) => (
         <Fragment key={index}>
-          {page.data.map((answer: AnswerInterface) => (
+          {page.answers.map((answer: AnswerInterface) => (
             <AnswerCard key={answer._id} {...answer} />
           ))}
         </Fragment>

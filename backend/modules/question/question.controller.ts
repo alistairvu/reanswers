@@ -27,7 +27,7 @@ export const getQuestions = async (req: Request, res: Response, next: any) => {
 
     res.send({
       success: 1,
-      data: questions,
+      questions: questions,
       questionCount: questionCount,
       nextCursor: skip + limit,
     })
@@ -52,7 +52,7 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
       throw new HTTPError("No matching questions found", 404)
     }
 
-    res.send({ success: 1, data: question })
+    res.send({ success: 1, question: question })
   } catch (err) {
     next(err)
   }
@@ -98,7 +98,7 @@ export const createQuestion = async (
       author,
     })
 
-    res.send({ success: 1, data: question })
+    res.send({ success: 1, question: question })
   } catch (err) {
     next(err)
   }
@@ -145,8 +145,11 @@ export const updateQuestion = async (
       throw new HTTPError("No update content inserted", 422)
     }
 
-    const updatedQuestion = await Question.updateOne({_id: req.params.id},   {updates: content})
-    res.send({success: 1, data: updatedQuestion})
+    const updatedQuestion = await Question.updateOne(
+      { _id: req.params.id },
+      { updates: content }
+    )
+    res.send({ success: 1, question: updatedQuestion })
   } catch (err) {
     next(err)
   }

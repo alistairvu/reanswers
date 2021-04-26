@@ -39,7 +39,7 @@ const AskPage: React.FC = () => {
       if (data.success) {
         reset()
         setTags([])
-        history.push(`/questions/${data.data._id}`)
+        history.push(`/questions/${data.question._id}`)
       }
     } catch (err) {
       console.log(err)

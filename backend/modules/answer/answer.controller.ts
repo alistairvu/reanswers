@@ -30,7 +30,7 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
 
     res.send({
       success: 1,
-      data: answers,
+      answers: answers,
       answerCount: answerCount,
       nextCursor: limit + skip,
     })
@@ -69,7 +69,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
       .to(question.author.toString())
       .emit("notification", answerNotification)
 
-    res.send({ success: 1, data: answer })
+    res.send({ success: 1, answer: answer })
   } catch (err) {
     next(err)
   }
