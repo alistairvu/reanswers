@@ -43,6 +43,7 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
       .select("-__v")
       .populate("author", "username email")
       .populate("tags", "title")
+      .populate("likeCount")
       .populate({
         path: "likes",
         match: { userId: req.user ? req.user._id : null },

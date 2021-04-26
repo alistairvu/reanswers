@@ -14,6 +14,7 @@ import answerRouter from "./modules/answer/answer.router"
 import notificationRouter from "./modules/notification/notification.router"
 import likeRouter from "./modules/like/like.router"
 import bookmarkRouter from "./modules/bookmark/bookmark.router"
+import searchRouter from "./modules/search/search.router"
 
 dotenv.config()
 connectDB()
@@ -42,6 +43,7 @@ app.use("/api/answers", answerRouter)
 app.use("/api/notifications", notificationRouter)
 app.use("/api/likes", likeRouter)
 app.use("/api/bookmarks", bookmarkRouter)
+app.use("/api/search", searchRouter)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/build")))
