@@ -79,7 +79,7 @@ const HomePage: React.FC = () => {
               <>
                 {questionData.pages.map((page, index) => (
                   <Fragment key={index}>
-                    {page.data.map((question: QuestionInterface) => (
+                    {page.questions.map((question: QuestionInterface) => (
                       <HomeQuestionCard {...question} key={question._id} />
                     ))}
                   </Fragment>

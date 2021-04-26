@@ -33,7 +33,7 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
       })
       return res.send({
         success: 1,
-        data: data,
+        like: data,
         message: `User ${req.user._id} liked question ${questionId}`,
       })
     }
@@ -60,7 +60,7 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
       })
       return res.send({
         success: 1,
-        data: data,
+        like: data,
         message: `User ${req.user._id} liked answer ${answerId}`,
       })
     }
@@ -69,9 +69,6 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
   }
 }
 
-
 // POST api/likes/check
 
-export const checkLike = async (req: Request, res: Response, next: any) => {
-  
-}
+export const checkLike = async (req: Request, res: Response, next: any) => {}

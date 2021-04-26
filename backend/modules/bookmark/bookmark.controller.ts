@@ -37,7 +37,7 @@ export const handleBookmark = async (
       })
       return res.send({
         success: 1,
-        data: data,
+        bookmark: data,
         message: `User ${req.user._id} added question ${questionId} to their bookmarks`,
       })
     }
@@ -64,7 +64,7 @@ export const handleBookmark = async (
       })
       return res.send({
         success: 1,
-        data: data,
+        bookmark: data,
         message: `User ${req.user._id} added answer ${answerId} to their bookmarks`,
       })
     }

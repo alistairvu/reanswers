@@ -23,7 +23,7 @@ const QuestionPage: React.FC = () => {
     const { data } = await axiosClient.get(`/api/questions/${questionId}`)
     console.log(data)
     if (data.success) {
-      return data.data
+      return data.question
     }
   }
 
