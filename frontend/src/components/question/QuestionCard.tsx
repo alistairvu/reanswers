@@ -77,6 +77,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
         )}
 
         <div className="tags">{renderTagBadges()}</div>
+
         <div className="mt-3">
           <div className="d-flex justify-content-between align-items-center">
             <div className="text-muted">
