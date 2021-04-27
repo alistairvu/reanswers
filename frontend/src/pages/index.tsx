@@ -5,6 +5,7 @@ import SignupPage from "./SignupPage"
 import AskPage from "./AskPage"
 import QuestionPage from "./QuestionPage"
 import SearchPage from "./SearchPage"
+import BookmarkPage from "./BookmarkPage"
 
 export {
   HomePage,
@@ -14,4 +15,5 @@ export {
   AskPage,
   QuestionPage,
   SearchPage,
+  BookmarkPage,
 }

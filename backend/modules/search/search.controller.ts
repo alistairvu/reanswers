@@ -32,6 +32,7 @@ export const searchQuestionsByKeyword = async (
         .select("-__v")
         .populate("author", "username email")
         .populate("tags", "title")
+        .populate("likeCount")
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },
@@ -90,6 +91,7 @@ export const searchQuestionsByTag = async (
       .select("-__v")
       .populate("author", "username email")
       .populate("tags", "title")
+      .populate("likeCount")
       .populate({
         path: "likes",
         match: { userId: req.user ? req.user._id : null },
