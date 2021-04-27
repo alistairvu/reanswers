@@ -54,4 +54,5 @@ interface AnswerInterface {
   author: UserInterface
   createdAt: string
   updatedAt: string
+  likes: LikeInterface[]
 }
