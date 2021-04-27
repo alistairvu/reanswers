@@ -9,18 +9,24 @@ export const searchQuestionsByKeyword = async (
   next: NextFunction
 ) => {
   try {
-    const { keyword } = req.query
+    const { keyword, sort } = req.query
     const skip = Number(req.query.skip) || 0
     const limit = Number(req.query.limit) || 10
 
+    const order =
+      sort === "latest" ? { createdAt: -1 } : { score: { $meta: "textScore" } }
+
     const [questions, questionCount] = await Promise.all([
-      Question.find({
-        $or: [
-          { title: { $regex: `${keyword}`, $options: "i" } },
-          { body: { $regex: `${keyword}`, $options: "i" } },
-        ],
-      })
-        .sort({ createdAt: -1 })
+      Question.find(
+        {
+          $text: {
+            $search: keyword as string,
+            $caseSensitive: false,
+          },
+        },
+        { score: { $meta: "textScore" } }
+      )
+        .sort(order)
         .skip(skip)
         .limit(limit)
         .select("-__v")
@@ -31,10 +37,10 @@ export const searchQuestionsByKeyword = async (
           match: { userId: req.user ? req.user._id : null },
         }),
       Question.find({
-        $or: [
-          { title: { $regex: `${keyword}`, $options: "i" } },
-          { body: { $regex: `${keyword}`, $options: "i" } },
-        ],
+        $text: {
+          $search: keyword as string,
+          $caseSensitive: false,
+        },
       }).countDocuments(),
     ])
 
@@ -62,6 +68,8 @@ export const searchQuestionsByTag = async (
 
     const tag = await Tag.findOne({ title: keyword as string })
 
+    console.log(tag)
+
     if (!tag) {
       return res.send({
         success: 1,
@@ -71,7 +79,7 @@ export const searchQuestionsByTag = async (
       })
     }
 
-    const questions = await Question.find({ tag: tag._id })
+    const questions = await Question.find({ tags: tag._id })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
@@ -82,6 +90,8 @@ export const searchQuestionsByTag = async (
         path: "likes",
         match: { userId: req.user ? req.user._id : null },
       })
+
+    console.log(questions)
 
     res.send({
       success: 1,

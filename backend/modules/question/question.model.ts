@@ -38,15 +38,6 @@ const QuestionSchema = new mongoose.Schema(
       ],
       default: [],
     },
-    likedBy: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "user",
-        },
-      ],
-      default: [],
-    },
     author: {
       type: mongoose.Types.ObjectId,
       ref: "user",
@@ -75,6 +66,8 @@ QuestionSchema.virtual("likeCount", {
   foreignField: "questionId",
   count: true,
 })
+
+QuestionSchema.index({ title: "text", body: "text", updates: "text" })
 
 export default mongoose.model<QuestionSchemaInterface>(
   "question",

@@ -34,6 +34,8 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
     }
   }
 
+  console.log(props)
+
   return (
     <Card className="mb-1">
       <Card.Body>

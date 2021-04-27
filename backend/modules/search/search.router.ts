@@ -7,7 +7,7 @@ import { checkUser } from "../../middlewares/auth.middleware"
 
 const router = express.Router()
 
-router.route("/").get(checkUser, searchQuestionsByKeyword)
-router.route("/tag").get(checkUser, searchQuestionsByTag)
+router.route("/questions").get(checkUser, searchQuestionsByKeyword)
+router.route("/tags").get(checkUser, searchQuestionsByTag)
 
 export default router

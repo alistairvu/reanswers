@@ -20,6 +20,7 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
         questionId: questionId,
         userId: req.user._id,
       })
+
       if (existingLike) {
         await existingLike.remove()
         return res.send({
@@ -27,10 +28,12 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
           message: `User ${req.user._id} unliked question ${questionId}`,
         })
       }
-      const data = Like.create({
+
+      const data = await Like.create({
         userId: req.user._id,
         questionId: questionId,
       })
+
       return res.send({
         success: 1,
         like: data,
@@ -43,10 +46,12 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
       if (!answer) {
         throw new HTTPError("No matching answers found", 404)
       }
+
       const existingLike = await Like.findOne({
         answerId: answerId,
         userId: req.user._id,
       })
+
       if (existingLike) {
         await existingLike.remove()
         return res.send({
@@ -54,10 +59,12 @@ export const handleLike = async (req: Request, res: Response, next: any) => {
           message: `User ${req.user._id} unliked answer ${answerId}`,
         })
       }
-      const data = Like.create({
+
+      const data = await Like.create({
         userId: req.user._id,
         answerId: answerId,
       })
+
       return res.send({
         success: 1,
         like: data,
