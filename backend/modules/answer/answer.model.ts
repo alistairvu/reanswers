@@ -33,8 +33,22 @@ const AnswerSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 )
+
+AnswerSchema.virtual("likes", {
+  ref: "like",
+  localField: "_id",
+  foreignField: "answerId",
+  justOne: false,
+})
+
+AnswerSchema.virtual("likeCount", {
+  ref: "like",
+  localField: "_id",
+  foreignField: "answerId",
+  count: true,
+})
 
 AnswerSchema.index({ content: "text" })
 

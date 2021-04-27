@@ -24,7 +24,12 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
-        .populate("author", "-password"),
+        .populate("author", "-password")
+        .populate("likeCount")
+        .populate({
+          path: "likes",
+          match: { userId: req.user ? req.user._id : null },
+        }),
       Answer.find({ question: questionId }).countDocuments(),
     ])
 
