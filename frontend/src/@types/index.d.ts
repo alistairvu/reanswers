@@ -15,7 +15,6 @@ interface QuestionInterface {
   updates: string
   imageUrl: string
   tags: TagInterface[]
-  likedBy: string[]
   title: string
   body: string
   author: UserInterface
@@ -55,4 +54,6 @@ interface AnswerInterface {
   createdAt: string
   updatedAt: string
   likes: LikeInterface[]
+  bookmarks: BookmarkInterface[]
+  likeCount: number
 }
