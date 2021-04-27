@@ -35,6 +35,10 @@ export const searchQuestionsByKeyword = async (
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },
+        })
+        .populate({
+          path: "bookmarks",
+          match: { userId: req.user ? req.user._id : null },
         }),
       Question.find({
         $text: {
@@ -88,6 +92,10 @@ export const searchQuestionsByTag = async (
       .populate("tags", "title")
       .populate({
         path: "likes",
+        match: { userId: req.user ? req.user._id : null },
+      })
+      .populate({
+        path: "bookmarks",
         match: { userId: req.user ? req.user._id : null },
       })
 
