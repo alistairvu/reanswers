@@ -52,10 +52,10 @@ const AppHeader: React.FC = () => {
       return (
         <Nav className="ms-auto">
           <AppSearchBar />
-          <LinkContainer to="/signup">
+          <LinkContainer to={`/signup?redirect=${location.pathname}`}>
             <Nav.Link>Sign Up</Nav.Link>
           </LinkContainer>
-          <LinkContainer to="/login">
+          <LinkContainer to={`/login?redirect=${location.pathname}`}>
             <Nav.Link>Log In</Nav.Link>
           </LinkContainer>
         </Nav>

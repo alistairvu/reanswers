@@ -50,6 +50,13 @@ AnswerSchema.virtual("likeCount", {
   count: true,
 })
 
+AnswerSchema.virtual("bookmarks", {
+  ref: "bookmark",
+  localField: "_id",
+  foreignField: "answerId",
+  justOne: false,
+})
+
 AnswerSchema.index({ content: "text" })
 
 export default mongoose.model<AnswerSchemaInterface>("answer", AnswerSchema)

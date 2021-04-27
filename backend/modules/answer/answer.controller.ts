@@ -29,6 +29,10 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },
+        })
+        .populate({
+          path: "bookmarks",
+          match: { userId: req.user ? req.user._id : null },
         }),
       Answer.find({ question: questionId }).countDocuments(),
     ])
