@@ -21,6 +21,7 @@ interface QuestionInterface {
   author: UserInterface
   createdAt: string
   likes: LikeInterface[]
+  bookmarks: BookmarkInterface[]
 }
 
 interface NotificationInterface {
@@ -32,6 +33,13 @@ interface NotificationInterface {
 }
 
 interface LikeInterface {
+  _id: string
+  userId: string
+  questionId: string
+  answerId: string
+}
+
+interface BookmarkInterface {
   _id: string
   userId: string
   questionId: string

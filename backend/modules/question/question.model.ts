@@ -60,6 +60,13 @@ QuestionSchema.virtual("likes", {
   justOne: false,
 })
 
+QuestionSchema.virtual("bookmarks", {
+  ref: "bookmark",
+  localField: "_id",
+  foreignField: "questionId",
+  justOne: false,
+})
+
 QuestionSchema.virtual("likeCount", {
   ref: "like",
   localField: "_id",

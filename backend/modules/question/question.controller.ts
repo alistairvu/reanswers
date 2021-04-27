@@ -26,6 +26,10 @@ export const getQuestions = async (
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },
+        })
+        .populate({
+          path: "bookmarks",
+          match: { userId: req.user ? req.user._id : null },
         }),
       Question.find({}).countDocuments(),
     ])
@@ -63,6 +67,10 @@ export const getTopQuestions = async (
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },
+        })
+        .populate({
+          path: "bookmarks",
+          match: { userId: req.user ? req.user._id : null },
         }),
       Question.find({}).countDocuments(),
     ])
@@ -88,6 +96,10 @@ export const showQuestion = async (req: Request, res: Response, next: any) => {
       .populate("likeCount")
       .populate({
         path: "likes",
+        match: { userId: req.user ? req.user._id : null },
+      })
+      .populate({
+        path: "bookmarks",
         match: { userId: req.user ? req.user._id : null },
       })
 

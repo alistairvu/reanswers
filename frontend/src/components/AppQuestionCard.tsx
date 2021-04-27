@@ -9,6 +9,7 @@ import UserContext from "../context/userContext"
 const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   const user = useContext(UserContext)
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
+  const [isBookmarked, setIsBookmarked] = useState(props.bookmarks.length > 0)
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
       <Badge key={tag._id} className="me-2" bg="primary">
@@ -34,6 +35,21 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
     }
   }
 
+  const handleBookmark = async () => {
+    try {
+      setIsBookmarked((prev) => !prev)
+      const { data } = await axiosClient.post("/api/bookmarks", {
+        questionId: props._id,
+      })
+      if (data.success) {
+        console.log(data)
+      }
+    } catch (err) {
+      setIsBookmarked((prev) => !prev)
+      console.log(err)
+    }
+  }
+
   console.log(props)
 
   return (
@@ -49,17 +65,30 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
           })}{" "}
           • Asked by {props.author.username}
         </Card.Text>
+
         <div className="tags">{renderTagBadges()}</div>
-        <div className="mt-3">
+
+        <div className="mt-3 d-flex justify-content-between">
           {user.user._id && (
             <i
-              className="fas fa-heart"
+              className={`${isLiked ? "fas" : "far"} fa-heart`}
               style={{
                 cursor: "pointer",
                 fontSize: "25px",
                 color: isLiked ? "#d9534f" : "#adb5bd",
               }}
               onClick={handleLike}
+            />
+          )}
+          {user.user._id && (
+            <i
+              className={`${isBookmarked ? "fas" : "far"} fa-bookmark`}
+              style={{
+                fontSize: "25px",
+                color: "#adb5bd",
+                cursor: "pointer",
+              }}
+              onClick={handleBookmark}
             />
           )}
         </div>
