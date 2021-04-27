@@ -4,9 +4,9 @@ import { formatDistance } from "date-fns"
 
 const NotificationCard: React.FC<NotificationInterface> = (props) => {
   return (
-    <Card>
+    <Card className="mb-1">
       <Card.Body>
-        <Link to={props.link}>
+        <Link to={props.link} className="text-decoration-none">
           <Card.Title>{props.title}</Card.Title>
         </Link>
         <Card.Text>{props.body}</Card.Text>

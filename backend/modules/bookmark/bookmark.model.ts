@@ -6,23 +6,33 @@ export interface BookmarkSchemaInterface extends mongoose.Document {
   userId: mongoose.Types.ObjectId
 }
 
-const BookmarkSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-  },
-  questionId: {
-    type: mongoose.Types.ObjectId,
-    required: function () {
-      return !this.answerId
+const BookmarkSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
+    questionId: {
+      type: mongoose.Types.ObjectId,
+      required: function () {
+        return !this.answerId
+      },
+    },
+    answerId: {
+      type: mongoose.Types.ObjectId,
+      required: function () {
+        return !this.questionId
+      },
     },
   },
-  answerId: {
-    type: mongoose.Types.ObjectId,
-    required: function () {
-      return !this.questionId
-    },
-  },
+  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+)
+
+BookmarkSchema.virtual("question", {
+  ref: "question",
+  localField: "questionId",
+  foreignField: "_id",
+  justOne: true,
 })
 
 export default mongoose.model<BookmarkSchemaInterface>(

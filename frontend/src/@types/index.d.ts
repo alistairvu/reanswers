@@ -22,6 +22,7 @@ interface QuestionInterface {
   createdAt: string
   likes: LikeInterface[]
   bookmarks: BookmarkInterface[]
+  likeCount: number
 }
 
 interface NotificationInterface {

@@ -10,6 +10,8 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   const user = useContext(UserContext)
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
   const [isBookmarked, setIsBookmarked] = useState(props.bookmarks.length > 0)
+  const [likeCount, setLikeCount] = useState(props.likeCount)
+
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
       <Badge key={tag._id} className="me-2" bg="primary">
@@ -21,6 +23,7 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   const handleLike = async () => {
     console.log(UserContext)
     try {
+      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1))
       setIsLiked((prev) => !prev)
       const { data } = await axiosClient.post("/api/likes", {
         questionId: props._id,
@@ -30,6 +33,7 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
         console.log(data)
       }
     } catch (err) {
+      setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1))
       setIsLiked((prev) => !prev)
       console.log(err)
     }
@@ -55,42 +59,50 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   return (
     <Card className="mb-1">
       <Card.Body>
-        <Card.Title>
-          <Link to={`/questions/${props._id}`}>{props.title}</Link>
+        <Card.Title className="fs-3">
+          <Link to={`/questions/${props._id}`} className="text-decoration-none">
+            {props.title}
+          </Link>
         </Card.Title>
-        <Card.Text>{props.body}</Card.Text>
-        <Card.Text className="text-muted">
+        <Card.Subtitle className="text-muted">
           {formatDistance(new Date(props.createdAt), new Date(), {
             addSuffix: true,
           })}{" "}
           • Asked by {props.author.username}
-        </Card.Text>
+        </Card.Subtitle>
+
+        <Card.Text className="mt-3">{props.body}</Card.Text>
 
         <div className="tags">{renderTagBadges()}</div>
 
-        <div className="mt-3 d-flex justify-content-between">
-          {user.user._id && (
-            <i
-              className={`${isLiked ? "fas" : "far"} fa-heart`}
-              style={{
-                cursor: "pointer",
-                fontSize: "25px",
-                color: isLiked ? "#d9534f" : "#adb5bd",
-              }}
-              onClick={handleLike}
-            />
-          )}
-          {user.user._id && (
-            <i
-              className={`${isBookmarked ? "fas" : "far"} fa-bookmark`}
-              style={{
-                fontSize: "25px",
-                color: "#adb5bd",
-                cursor: "pointer",
-              }}
-              onClick={handleBookmark}
-            />
-          )}
+        <div className="mt-3 d-flex justify-content-between align-items-center">
+          <div className="text-muted">
+            {likeCount} {likeCount === 1 ? "like" : "likes"}
+          </div>
+          <div>
+            {user.user._id && (
+              <>
+                <i
+                  className={`${isBookmarked ? "fas" : "far"} fa-bookmark me-3`}
+                  style={{
+                    fontSize: "25px",
+                    color: "#adb5bd",
+                    cursor: "pointer",
+                  }}
+                  onClick={handleBookmark}
+                />
+                <i
+                  className={`${isLiked ? "fas" : "far"} fa-heart`}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "25px",
+                    color: isLiked ? "#d9534f" : "#adb5bd",
+                  }}
+                  onClick={handleLike}
+                />
+              </>
+            )}
+          </div>
         </div>
       </Card.Body>
     </Card>

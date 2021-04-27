@@ -8,6 +8,7 @@ import {
   AskPage,
   QuestionPage,
   SearchPage,
+  BookmarkPage,
 } from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
 import { useContext, useEffect } from "react"
@@ -50,6 +51,9 @@ const App: React.FC = () => {
         </ProtectedRoute>
         <ProtectedRoute path="/ask">
           <AskPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/bookmarks">
+          <BookmarkPage />
         </ProtectedRoute>
         <Route path="/search">
           <SearchPage />
