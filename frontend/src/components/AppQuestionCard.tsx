@@ -65,7 +65,9 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
           })}{" "}
           • Asked by {props.author.username}
         </Card.Text>
+
         <div className="tags">{renderTagBadges()}</div>
+
         <div className="mt-3 d-flex justify-content-between">
           {user.user._id && (
             <i
