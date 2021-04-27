@@ -16,6 +16,7 @@ const AppSearchBar: React.FC = () => {
   const handleSearch = (searchData: SearchData) => {
     console.log(searchData)
     reset()
+    history.push(`/search?keyword=${searchData.keyword}`)
   }
 
   return (

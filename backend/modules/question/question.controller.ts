@@ -5,19 +5,61 @@ import HTTPError from "../../httpError"
 import { Request, Response, NextFunction } from "express"
 
 // GET /api/questions
-export const getQuestions = async (req: Request, res: Response, next: any) => {
+export const getQuestions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const limit = Number(req.query.limit) || 10
     const skip = Number(req.query.skip) || 0
-    const sort = req.query.sort
-    const order = sort == "top" ? { likedBy: -1 } : { createdAt: -1 }
 
     const [questions, questionCount] = await Promise.all([
       Question.find({})
-        .sort(order)
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
         .select("-__v")
         .populate("author", "username email")
         .populate("tags", "title")
+        .populate("likeCount")
+        .populate({
+          path: "likes",
+          match: { userId: req.user ? req.user._id : null },
+        }),
+      Question.find({}).countDocuments(),
+    ])
+
+    res.send({
+      success: 1,
+      questions: questions,
+      questionCount: questionCount,
+      nextCursor: skip + limit,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+// GEt /api/questions/top
+export const getTopQuestions = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
+
+    const [questions, questionCount] = await Promise.all([
+      Question.find({})
+        .select("-__v")
+        .populate("author", "username email")
+        .populate("tags", "title")
+        .populate({ path: "likeCount", sort: { likeCount: -1 } })
+        .sort({ likeCount: -1 })
+        .skip(skip)
+        .limit(limit)
         .populate({
           path: "likes",
           match: { userId: req.user ? req.user._id : null },

@@ -4,13 +4,12 @@ import AppHelmet from "../components/AppHelmet"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import { useInfiniteQuery, useQuery } from "react-query"
-import { HomeQuestionCard } from "../components/home"
+import AppQuestionCard from "../components/AppQuestionCard"
 import { Fragment } from "react"
 import axiosClient from "../api"
 import useInfiniteScroll from "../hooks/useInfiniteScroll"
 
 const HomePage: React.FC = () => {
-
   const getQuestions = async ({ pageParam = 0 }) => {
     const { data } = await axiosClient.get(`/api/questions`, {
       params: {
@@ -81,7 +80,7 @@ const HomePage: React.FC = () => {
                 {questionData.pages.map((page, index) => (
                   <Fragment key={index}>
                     {page.questions.map((question: QuestionInterface) => (
-                      <HomeQuestionCard {...question} key={question._id} />
+                      <AppQuestionCard {...question} key={question._id} />
                     ))}
                   </Fragment>
                 ))}

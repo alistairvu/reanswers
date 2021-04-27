@@ -36,4 +36,6 @@ const AnswerSchema = new mongoose.Schema(
   { timestamps: true }
 )
 
+AnswerSchema.index({ content: "text" })
+
 export default mongoose.model<AnswerSchemaInterface>("answer", AnswerSchema)

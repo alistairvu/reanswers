@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import Question from "../question/question.model"
 
 export interface LikeSchemaInterface extends mongoose.Document {
   questionId: mongoose.Types.ObjectId
