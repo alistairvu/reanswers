@@ -2,7 +2,10 @@ import Container from "react-bootstrap/Container"
 import AppHelmet from "../components/AppHelmet"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
-import { BookmarkQuestionList } from "../components/bookmark"
+import {
+  BookmarkQuestionList,
+  BookmarkAnswerList,
+} from "../components/bookmark"
 
 const BookmarkPage: React.FC = () => {
   return (
@@ -15,6 +18,9 @@ const BookmarkPage: React.FC = () => {
         <Tabs defaultActiveKey="questions" id="bookmark-tab" className="mb-2">
           <Tab eventKey="questions" title="Questions">
             <BookmarkQuestionList />
+          </Tab>
+          <Tab eventKey="answers" title="Answers">
+            <BookmarkAnswerList />
           </Tab>
         </Tabs>
       </Container>

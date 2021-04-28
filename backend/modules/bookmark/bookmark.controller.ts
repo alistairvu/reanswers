@@ -170,6 +170,10 @@ export const getBookmarkedAnswers = async (
               path: "bookmarks",
               match: { userId: req.user ? req.user._id : null },
             },
+            {
+              path: "question",
+              select: "title",
+            },
           ],
         }),
       Bookmark.find({

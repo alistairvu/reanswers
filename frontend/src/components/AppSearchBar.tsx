@@ -21,7 +21,7 @@ const AppSearchBar: React.FC = () => {
 
   return (
     <Form
-      className="mt-2 mt-md-0 me-md-4"
+      className="mt-2 mt-lg-0 me-lg-4"
       onSubmit={handleSubmit(handleSearch)}
     >
       <InputGroup>
