@@ -3,6 +3,7 @@ import Spinner from "react-bootstrap/Spinner"
 import QuestionCard from "../AppQuestionCard"
 import { Fragment } from "react"
 import { useInfiniteQuery } from "react-query"
+import useInfiniteScroll from "../../hooks/useInfiniteScroll"
 
 const BookmarkQuestionList: React.FC = () => {
   const fetchBookmarks = async ({ pageParam = 0 }) => {
@@ -23,7 +24,7 @@ const BookmarkQuestionList: React.FC = () => {
     isLoading,
   } = useInfiniteQuery("bookmarked_questions", fetchBookmarks)
 
-  console.log(bookmarkData)
+  useInfiniteScroll(fetchNextPage, hasNextPage)
 
   if (isLoading) {
     return (
