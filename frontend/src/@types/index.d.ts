@@ -44,6 +44,7 @@ interface BookmarkInterface {
   userId: string
   questionId: string
   answerId: string
+  question: QuestionInterface
 }
 
 interface AnswerInterface {
