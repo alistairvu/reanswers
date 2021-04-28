@@ -44,16 +44,21 @@ interface BookmarkInterface {
   userId: string
   questionId: string
   answerId: string
+  question: QuestionInterface
+  answer: AnswerInterface
 }
 
 interface AnswerInterface {
   _id: string
   content: string
-  question: string
   author: UserInterface
   createdAt: string
   updatedAt: string
   likes: LikeInterface[]
   bookmarks: BookmarkInterface[]
   likeCount: number
+  question: {
+    _id: string
+    title: string
+  }
 }

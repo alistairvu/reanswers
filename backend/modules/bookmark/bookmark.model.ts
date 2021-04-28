@@ -35,6 +35,13 @@ BookmarkSchema.virtual("question", {
   justOne: true,
 })
 
+BookmarkSchema.virtual("answer", {
+  ref: "answer",
+  localField: "answerId",
+  foreignField: "_id",
+  justOne: true,
+})
+
 export default mongoose.model<BookmarkSchemaInterface>(
   "bookmark",
   BookmarkSchema

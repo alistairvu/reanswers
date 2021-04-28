@@ -133,3 +133,62 @@ export const getBookmarkedQuestions = async (
     next(err)
   }
 }
+
+// GET /api/bookmarks/answers
+export const getBookmarkedAnswers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
+
+    const [bookmarks, bookmarkCount] = await Promise.all([
+      Bookmark.find({
+        userId: req.user._id,
+        answerId: { $exists: true },
+      })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate({
+          path: "answer",
+          populate: [
+            {
+              path: "author",
+              select: "-password",
+            },
+            {
+              path: "likeCount",
+            },
+            {
+              path: "likes",
+              match: { userId: req.user ? req.user._id : null },
+            },
+            {
+              path: "bookmarks",
+              match: { userId: req.user ? req.user._id : null },
+            },
+            {
+              path: "question",
+              select: "title",
+            },
+          ],
+        }),
+      Bookmark.find({
+        userId: req.user._id,
+        answerId: { $exists: true },
+      }).countDocuments(),
+    ])
+
+    res.send({
+      success: 1,
+      bookmarks: bookmarks,
+      bookmarkCount: bookmarkCount,
+      nextCursor: skip + limit,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
