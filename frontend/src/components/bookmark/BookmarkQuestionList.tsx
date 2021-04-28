@@ -42,6 +42,14 @@ const BookmarkQuestionList: React.FC = () => {
           ))}
         </Fragment>
       ))}
+
+      {hasNextPage ? (
+        <div className="text-center my-2">
+          <Spinner animation="border" />
+        </div>
+      ) : (
+        <div className="text-center my-2">No more bookmarks.</div>
+      )}
     </>
   )
 }
