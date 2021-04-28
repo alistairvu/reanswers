@@ -93,6 +93,11 @@ export const deleteAnswer = async (req: Request, res: Response, next: any) => {
     if (!answer) {
       throw new HTTPError("No matching answers found!", 404)
     }
+
+    if (answer.author.toString() !== req.user._id.toString()) {
+      throw new HTTPError("You cannot do this action!", 401)
+    }
+
     await Answer.findByIdAndDelete(answerId)
     res.send({ success: 1, deleted: 1 })
   } catch (err) {
