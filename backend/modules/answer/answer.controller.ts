@@ -52,33 +52,35 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
 export const createAnswer = async (req: Request, res: Response, next: any) => {
   try {
     const { questionId, content } = req.body
-    const question = await Question.findById(questionId)
+    const question = await Question.findById(questionId).populate("bookmarks")
 
     if (!question) {
       throw new HTTPError("No matching questions found!", 404)
     }
+
+    const questionBookmarkedBy = question.bookmarks.map(
+      (bookmark) => bookmark.userId
+    )
 
     const answer = await Answer.create({
       content: content,
       question: questionId,
       author: req.user._id,
     })
+    res.send({ success: 1, answer: answer })
 
     await answer.populate("author", "-password").execPopulate()
 
-    // TODO: change to callback
     const answerNotification = await Notification.create({
       title: `New answer for your question: ${question.title}`,
       body: `${req.user.username} answered your question!`,
-      subscribers: [question.author],
+      subscribers: [question.author, ...questionBookmarkedBy],
       link: `/questions/${questionId}`,
     })
 
-    req.io
-      .to(question.author.toString())
-      .emit("notification", answerNotification)
-
-    res.send({ success: 1, answer: answer })
+    answerNotification.subscribers.forEach((subscriber) => {
+      req.io.to(subscriber.toString()).emit("notification", answerNotification)
+    })
   } catch (err) {
     next(err)
   }

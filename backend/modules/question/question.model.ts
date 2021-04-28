@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { BookmarkSchemaInterface } from "../bookmark/bookmark.model"
 
 export interface QuestionSchemaInterface extends mongoose.Document {
   title: string
@@ -6,9 +7,8 @@ export interface QuestionSchemaInterface extends mongoose.Document {
   updates: string
   imageUrl: string
   tags: mongoose.Types.ObjectId[]
-  likedBy: mongoose.Types.ObjectId[]
   author: mongoose.Types.ObjectId
-  answers: mongoose.Types.ObjectId[]
+  bookmarks: BookmarkSchemaInterface[]
 }
 
 const QuestionSchema = new mongoose.Schema(
