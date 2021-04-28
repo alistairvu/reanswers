@@ -25,6 +25,7 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
         .skip(skip)
         .limit(limit)
         .populate("author", "-password")
+        .populate("question", "title")
         .populate("likeCount")
         .populate({
           path: "likes",
