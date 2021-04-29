@@ -91,6 +91,7 @@ const AppHeader: React.FC = () => {
           <LinkContainer to="/bookmarks">
             <NavDropdown.Item>Bookmarks</NavDropdown.Item>
           </LinkContainer>
+          <NavDropdown.Divider />
           <NavDropdown.Item onClick={handleLogOut}>Log Out</NavDropdown.Item>
         </NavDropdown>
       </Nav>

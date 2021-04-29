@@ -3,25 +3,13 @@ import Spinner from "react-bootstrap/Spinner"
 import AppHelmet from "../components/AppHelmet"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { useInfiniteQuery, useQuery } from "react-query"
-import AppQuestionCard from "../components/AppQuestionCard"
-import { Fragment } from "react"
+import Tabs from "react-bootstrap/Tabs"
+import Tab from "react-bootstrap/Tab"
+import { useQuery } from "react-query"
 import axiosClient from "../api"
-import useInfiniteScroll from "../hooks/useInfiniteScroll"
+import { HomeLatestQuestions, HomeTopQuestions } from "../components/home"
 
 const HomePage: React.FC = () => {
-  const getQuestions = async ({ pageParam = 0 }) => {
-    const { data } = await axiosClient.get(`/api/questions`, {
-      params: {
-        skip: pageParam,
-      },
-    })
-    console.log(data)
-    if (data.success) {
-      return data
-    }
-  }
-
   const getTopTags = async () => {
     const { data } = await axiosClient.get("/api/tags/top")
     if (data.success) {
@@ -29,26 +17,10 @@ const HomePage: React.FC = () => {
     }
   }
 
-  const {
-    data: questionData,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteQuery("home_questions", getQuestions, {
-    getNextPageParam: (lastPage: any) => {
-      if (lastPage.nextCursor > lastPage.questionCount) {
-        return false
-      }
-      return lastPage.nextCursor
-    },
-  })
-
   const { data: tagData, isLoading: isTagLoading } = useQuery(
     "home_tags",
     getTopTags
   )
-
-  useInfiniteScroll(fetchNextPage, hasNextPage)
 
   return (
     <>
@@ -71,31 +43,14 @@ const HomePage: React.FC = () => {
             </ol>
           </Col>
           <Col xs={12} lg={8}>
-            {isLoading ? (
-              <div className="text-center">
-                <Spinner animation="border" />
-              </div>
-            ) : (
-              <>
-                {questionData.pages.map((page, index) => (
-                  <Fragment key={index}>
-                    {page.questions.map((question: QuestionInterface) => (
-                      <AppQuestionCard {...question} key={question._id} />
-                    ))}
-                  </Fragment>
-                ))}
-
-                {hasNextPage ? (
-                  <div className="my-2 text-center">
-                    <Spinner animation="border" />
-                  </div>
-                ) : (
-                  <div className="my-2 text-center">
-                    <p>No more questions.</p>
-                  </div>
-                )}
-              </>
-            )}
+            <Tabs defaultActiveKey="top" id="home-tab" className="mb-2">
+              <Tab eventKey="top" title="Top">
+                <HomeTopQuestions />
+              </Tab>
+              <Tab eventKey="latest" title="Latest">
+                <HomeLatestQuestions />
+              </Tab>
+            </Tabs>
           </Col>
         </Row>
       </Container>

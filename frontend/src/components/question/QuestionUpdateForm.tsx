@@ -2,6 +2,7 @@ import Card from "react-bootstrap/Card"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
 import { useForm } from "react-hook-form"
+import { useState } from "react"
 import { useQueryClient } from "react-query"
 import MarkdownEditor from "@uiw/react-markdown-editor"
 import axiosClient from "../../api"
@@ -21,6 +22,7 @@ const QuestionUpdateForm: React.FC<QuestionUpdateFormProps> = ({
   toggleForm,
   questionId,
 }) => {
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const {
     watch,
     handleSubmit,
@@ -31,6 +33,7 @@ const QuestionUpdateForm: React.FC<QuestionUpdateFormProps> = ({
 
   const handleUpdate = async (updateData: QuestionUpdateDataInterface) => {
     try {
+      setIsUpdating(true)
       const { data } = await axiosClient.post(`/api/questions/${questionId}`, {
         ...updateData,
         questionId,
@@ -38,9 +41,11 @@ const QuestionUpdateForm: React.FC<QuestionUpdateFormProps> = ({
       if (data.success) {
         console.log(data)
         queryClient.invalidateQueries(["question", questionId])
+        setIsUpdating(false)
         toggleForm(false)
       }
     } catch (err) {
+      setIsUpdating(false)
       console.log(err)
     }
   }
@@ -62,8 +67,8 @@ const QuestionUpdateForm: React.FC<QuestionUpdateFormProps> = ({
             />
           </Form.Group>
 
-          <Button type="submit" variant="primary">
-            Update
+          <Button type="submit" variant="primary" disabled={isUpdating}>
+            {isUpdating ? "Updating..." : "Update"}
           </Button>
         </Form>
       </Card.Body>

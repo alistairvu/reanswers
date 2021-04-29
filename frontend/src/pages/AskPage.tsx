@@ -19,6 +19,8 @@ interface QuestionDataInterface {
 
 const AskPage: React.FC = () => {
   const [tags, setTags] = useState<string[]>([])
+  const [isAsking, setIsAsking] = useState<boolean>(false)
+
   const history = useHistory()
   const {
     register,
@@ -33,6 +35,7 @@ const AskPage: React.FC = () => {
 
   const handleAsk = async (questionData: QuestionDataInterface) => {
     console.log({ ...questionData, tags })
+    setIsAsking(true)
     try {
       const { data } = await axiosClient.post("/api/questions", {
         ...questionData,
@@ -41,9 +44,11 @@ const AskPage: React.FC = () => {
       if (data.success) {
         reset()
         setTags([])
+        setIsAsking(false)
         history.push(`/questions/${data.question._id}`)
       }
     } catch (err) {
+      setIsAsking(false)
       console.log(err)
     }
   }
@@ -90,8 +95,8 @@ const AskPage: React.FC = () => {
                     <AskTagsInput tags={tags} setTags={setTags} />
                   </Form.Group>
 
-                  <Button type="submit" variant="primary">
-                    Ask
+                  <Button type="submit" variant="primary" disabled={isAsking}>
+                    {isAsking ? "Asking..." : "Ask"}
                   </Button>
                 </Form>
               </Card.Body>

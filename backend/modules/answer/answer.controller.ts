@@ -130,6 +130,7 @@ export const createAnswer = async (req: Request, res: Response, next: any) => {
       body: `${req.user.username} answered your question!`,
       subscribers: [question.author, ...questionBookmarkedBy],
       link: `/questions/${questionId}`,
+      itemId: answer._id,
     })
 
     answerNotification.subscribers.forEach((subscriber) => {
@@ -154,7 +155,7 @@ export const deleteAnswer = async (req: Request, res: Response, next: any) => {
       throw new HTTPError("You cannot do this action!", 401)
     }
 
-    await Answer.findByIdAndDelete(answerId)
+    await answer.remove()
     res.send({ success: 1, deleted: 1 })
   } catch (err) {
     next(err)

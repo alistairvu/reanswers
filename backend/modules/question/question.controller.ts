@@ -54,6 +54,7 @@ export const getTopQuestions = async (
   try {
     const limit = Number(req.query.limit) || 10
     const skip = Number(req.query.skip) || 0
+    const userId = req.user ? req.user._id : null
 
     const [questions, questionCount] = await Promise.all([
       Question.aggregate([
@@ -66,12 +67,79 @@ export const getTopQuestions = async (
           },
         },
         {
-          $addFields: {
-            likeCount: { $size: "$likeList" },
+          $lookup: {
+            from: "bookmarks",
+            localField: "_id",
+            foreignField: "questionId",
+            as: "bookmarkList",
           },
         },
         {
-          $sort: { likeCount: -1 },
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+        {
+          $unwind: {
+            path: "$author",
+          },
+        },
+        {
+          $lookup: {
+            from: "tags",
+            localField: "tags",
+            foreignField: "_id",
+            as: "tags",
+          },
+        },
+        {
+          $addFields: {
+            likeCount: { $size: "$likeList" },
+            likes: {
+              $filter: {
+                input: "$likeList",
+                as: "likeList",
+                cond: {
+                  $eq: ["$$likeList.userId", userId],
+                },
+              },
+            },
+            bookmarks: {
+              $filter: {
+                input: "$bookmarkList",
+                as: "bookmarkList",
+                cond: {
+                  $eq: ["$$bookmarkList.userId", userId],
+                },
+              },
+            },
+          },
+        },
+        {
+          $sort: { likeCount: -1, createdAt: -1 },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $project: {
+            author: {
+              password: 0,
+              questions: 0,
+              answers: 0,
+              bookmarks: 0,
+              createdAt: 0,
+              updatedAt: 0,
+            },
+            likeList: 0,
+            bookmarkList: 0,
+          },
         },
       ]),
       Question.find({}).countDocuments(),
@@ -168,7 +236,7 @@ export const deleteQuestion = async (
   next: NextFunction
 ) => {
   try {
-    const question = await Question.findByIdAndDelete(req.params.id)
+    const question = await Question.findById(req.params.id)
 
     if (!question) {
       throw new HTTPError("No matching questions found", 404)
@@ -177,6 +245,8 @@ export const deleteQuestion = async (
     if (question.author.toString() !== req.user._id.toString()) {
       throw new HTTPError("Action not allowed", 401)
     }
+
+    await question.remove()
 
     res.send({ success: 1, deleted: 1 })
   } catch (err) {

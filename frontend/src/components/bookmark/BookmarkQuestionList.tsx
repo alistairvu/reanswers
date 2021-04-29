@@ -10,6 +10,7 @@ const BookmarkQuestionList: React.FC = () => {
     const { data } = await axiosClient.get("/api/bookmarks/questions", {
       params: {
         skip: pageParam,
+        limit: 1,
       },
     })
     if (data.success) {
@@ -38,9 +39,10 @@ const BookmarkQuestionList: React.FC = () => {
     <>
       {bookmarkData.pages.map((page, index) => (
         <Fragment key={index}>
-          {page.bookmarks.map((bookmark: BookmarkInterface) => (
-            <QuestionCard key={bookmark._id} {...bookmark.question} />
-          ))}
+          {page.bookmarks.map((bookmark: BookmarkInterface) => {
+            console.log(bookmark.question)
+            return <QuestionCard key={bookmark._id} {...bookmark.question} />
+          })}
         </Fragment>
       ))}
 

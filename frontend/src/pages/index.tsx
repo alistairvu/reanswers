@@ -1,19 +1,10 @@
-import HomePage from "./HomePage"
-import LoginPage from "./LoginPage"
-import NotificationsPage from "./NotificationsPage"
-import SignupPage from "./SignupPage"
-import AskPage from "./AskPage"
-import QuestionPage from "./QuestionPage"
-import SearchPage from "./SearchPage"
-import BookmarkPage from "./BookmarkPage"
-
-export {
-  HomePage,
-  LoginPage,
-  NotificationsPage,
-  SignupPage,
-  AskPage,
-  QuestionPage,
-  SearchPage,
-  BookmarkPage,
-}
+export { default as HomePage } from "./HomePage"
+export { default as LoginPage } from "./LoginPage"
+export { default as NotificationsPage } from "./NotificationsPage"
+export { default as SignupPage } from "./SignupPage"
+export { default as AskPage } from "./AskPage"
+export { default as BookmarkPage } from "./BookmarkPage"
+export { default as SettingsPage } from "./SettingsPage"
+export { default as SearchPage } from "./SearchPage"
+export { default as QuestionPage } from "./QuestionPage"
+export { default as TagPage } from "./TagPage"

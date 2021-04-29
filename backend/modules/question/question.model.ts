@@ -1,5 +1,8 @@
 import mongoose from "mongoose"
-import { BookmarkSchemaInterface } from "../bookmark/bookmark.model"
+import Answer from "../answer/answer.model"
+import Bookmark, { BookmarkSchemaInterface } from "../bookmark/bookmark.model"
+import Like from "../like/like.model"
+import Tag from "../tag/tag.model"
 
 export interface QuestionSchemaInterface extends mongoose.Document {
   title: string
@@ -75,6 +78,28 @@ QuestionSchema.virtual("likeCount", {
 })
 
 QuestionSchema.index({ title: "text", body: "text", updates: "text" })
+
+QuestionSchema.pre(
+  "remove",
+  async function (this: QuestionSchemaInterface, next: any) {
+    await Answer.remove({ question: this._id })
+    await Bookmark.remove({ questionId: this._id })
+    await Like.remove({ questionId: this._id })
+
+    const updateTags = async (id: mongoose.Types.ObjectId) => {
+      await Tag.findOneAndUpdate({ _id: id }, { $inc: { count: -1 } })
+    }
+    const updateTagPromises = []
+
+    for (let tag of this.tags) {
+      updateTagPromises.push(updateTags(tag))
+    }
+
+    await Promise.all(updateTagPromises)
+
+    next()
+  }
+)
 
 export default mongoose.model<QuestionSchemaInterface>(
   "question",
