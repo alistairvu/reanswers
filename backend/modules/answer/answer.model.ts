@@ -1,4 +1,7 @@
 import mongoose from "mongoose"
+import Bookmark from "../bookmark/bookmark.model"
+import Like from "../like/like.model"
+import Notification from "../notification/notification.model"
 
 export interface AnswerSchemaInterface extends mongoose.Document {
   title: string
@@ -58,5 +61,15 @@ AnswerSchema.virtual("bookmarks", {
 })
 
 AnswerSchema.index({ content: "text" })
+
+AnswerSchema.pre(
+  "remove",
+  async function (this: AnswerSchemaInterface, next: any) {
+    await Bookmark.remove({ answerId: this._id })
+    await Like.remove({ answerId: this._id })
+    await Notification.remove({ itemId: this._id })
+    next()
+  }
+)
 
 export default mongoose.model<AnswerSchemaInterface>("answer", AnswerSchema)
