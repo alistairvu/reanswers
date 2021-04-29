@@ -16,15 +16,6 @@ const AnswerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    likedBy: {
-      type: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "user",
-        },
-      ],
-      default: [],
-    },
     author: {
       type: mongoose.Types.ObjectId,
       ref: "user",
