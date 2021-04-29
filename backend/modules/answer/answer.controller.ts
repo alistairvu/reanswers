@@ -2,8 +2,8 @@ import { Response, Request, NextFunction } from "express"
 import Answer from "./answer.model"
 import Question from "../question/question.model"
 import Notification from "../notification/notification.model"
-import HTTPError from "../../httpError";
-import mongoose from 'mongoose';
+import HTTPError from "../../httpError"
+import mongoose from "mongoose"
 
 // GET /api/answers/questions/:id
 export const getAnswers = async (req: Request, res: Response, next: any) => {
@@ -59,6 +59,7 @@ export const getTopAnswers = async (
   try {
     const limit = Number(req.query.limit) || 10
     const skip = Number(req.query.skip) || 0
+    const userId = req.user ? req.user._id : null
 
     const questionId = req.params.id
     const question = Question.findById(questionId)
@@ -80,12 +81,71 @@ export const getTopAnswers = async (
           },
         },
         {
+          $lookup: {
+            from: "bookmarks",
+            localField: "_id",
+            foreignField: "answerId",
+            as: "bookmarkList",
+          },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "author",
+            foreignField: "_id",
+            as: "author",
+          },
+        },
+        {
+          $unwind: {
+            path: "$author",
+          },
+        },
+        {
           $addFields: {
             likeCount: { $size: "$likeList" },
+            likes: {
+              $filter: {
+                input: "$likeList",
+                as: "likeList",
+                cond: {
+                  $eq: ["$$likeList.userId", userId],
+                },
+              },
+            },
+            bookmarks: {
+              $filter: {
+                input: "$bookmarkList",
+                as: "bookmarkList",
+                cond: {
+                  $eq: ["$$bookmarkList.userId", userId],
+                },
+              },
+            },
           },
         },
         {
           $sort: { likeCount: -1 },
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: limit,
+        },
+        {
+          $project: {
+            author: {
+              password: 0,
+              questions: 0,
+              answers: 0,
+              bookmarks: 0,
+              createdAt: 0,
+              updatedAt: 0,
+            },
+            likeList: 0,
+            bookmarkList: 0,
+          },
         },
       ]),
       Answer.find({ question: questionId }).countDocuments(),
