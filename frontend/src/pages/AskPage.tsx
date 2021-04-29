@@ -26,6 +26,8 @@ const AskPage: React.FC = () => {
     watch,
     setValue,
     reset,
+    setError,
+    formState: { errors },
   } = useForm<QuestionDataInterface>()
   const markdownText = watch("body", "")
 
@@ -45,6 +47,7 @@ const AskPage: React.FC = () => {
       console.log(err)
     }
   }
+  console.log(errors)
 
   return (
     <>
@@ -62,8 +65,9 @@ const AskPage: React.FC = () => {
                       size="lg"
                       type="text"
                       placeholder="Title"
-                      {...register("title", { required: true })}
+                      {...register("title", { required: "Please add a title" })}
                     />
+                    {errors.title && <p>{errors.title.message}</p>}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="body">
@@ -75,7 +79,11 @@ const AskPage: React.FC = () => {
                       onChange={(editor: any, data: any, value: string) =>
                         setValue("body", value)
                       }
+                      {...register("body", {
+                        required: "Please add some details",
+                      })}
                     />
+                    {errors.body && <p>{errors.body.message}</p>}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="tags">
