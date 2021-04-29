@@ -1,7 +1,6 @@
 import Badge from "react-bootstrap/Badge"
 import Card from "react-bootstrap/Card"
 import { Link, useHistory } from "react-router-dom"
-import { LinkContainer } from "react-router-bootstrap"
 import { formatDistance } from "date-fns"
 import axiosClient from "../api"
 import { useContext, useState } from "react"
