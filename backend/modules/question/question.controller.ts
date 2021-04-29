@@ -56,22 +56,24 @@ export const getTopQuestions = async (
     const skip = Number(req.query.skip) || 0
 
     const [questions, questionCount] = await Promise.all([
-      Question.find({})
-        .select("-__v")
-        .populate("author", "username email")
-        .populate("tags", "title")
-        .populate({ path: "likeCount", sort: { likeCount: -1 } })
-        .sort({ likeCount: -1 })
-        .skip(skip)
-        .limit(limit)
-        .populate({
-          path: "likes",
-          match: { userId: req.user ? req.user._id : null },
-        })
-        .populate({
-          path: "bookmarks",
-          match: { userId: req.user ? req.user._id : null },
-        }),
+      Question.aggregate([
+        {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "questionId",
+            as: "likeList",
+          },
+        },
+        {
+          $addFields: {
+            likeCount: { $size: "$likeList" },
+          },
+        },
+        {
+          $sort: { likeCount: -1 },
+        },
+      ]),
       Question.find({}).countDocuments(),
     ])
 
