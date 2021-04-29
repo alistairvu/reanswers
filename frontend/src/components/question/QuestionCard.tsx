@@ -6,6 +6,7 @@ import { useState, useContext } from "react"
 import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
 import QuestionUpdateForm from "./QuestionUpdateForm"
+import { useHistory } from "react-router-dom"
 
 const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
@@ -13,6 +14,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
   const [isUpdateFormShown, setIsUpdateFormShown] = useState(false)
   const [likeCount, setLikeCount] = useState(props.likeCount)
   const user = useContext(UserContext)
+  const history = useHistory()
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
@@ -60,6 +62,19 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
     }
   }
 
+  const handleDelete = async () => {
+    if (window.confirm("Do you really want to delete this question?")) {
+      try {
+        const { data } = await axiosClient.delete(`/api/questions/${props._id}`)
+        if (data.success) {
+          history.push("/")
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   return (
     <Card>
       <Card.Body>
@@ -85,17 +100,28 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
             </div>
             <div>
               {user.user._id === props.author._id && (
-                <i
-                  className={`${
-                    isUpdateFormShown ? "fas" : "far"
-                  } fa-edit me-3`}
-                  style={{
-                    fontSize: "25px",
-                    color: "#adb5bd",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => setIsUpdateFormShown((prev) => !prev)}
-                ></i>
+                <>
+                  <i
+                    className={`${
+                      isUpdateFormShown ? "fas" : "far"
+                    } fa-edit me-3`}
+                    style={{
+                      fontSize: "25px",
+                      color: "#adb5bd",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setIsUpdateFormShown((prev) => !prev)}
+                  ></i>
+                  <i
+                    className="far fa-trash-alt me-3"
+                    style={{
+                      fontSize: "25px",
+                      color: "#adb5bd",
+                      cursor: "pointer",
+                    }}
+                    onClick={handleDelete}
+                  />
+                </>
               )}
               {user.user._id && (
                 <>
@@ -110,6 +136,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
                     }}
                     onClick={handleBookmark}
                   />
+
                   <i
                     className={`${isLiked ? "fas" : "far"} fa-heart`}
                     style={{
