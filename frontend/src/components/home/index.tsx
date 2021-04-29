@@ -1,3 +1,2 @@
-import HomeLatestQuestions from "./HomeLatestQuestions"
-
-export { HomeLatestQuestions }
+export { default as HomeLatestQuestions } from "./HomeLatestQuestions"
+export { default as HomeTopQuestions } from "./HomeTopQuestions"

@@ -1,6 +1,7 @@
 import Badge from "react-bootstrap/Badge"
 import Card from "react-bootstrap/Card"
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import { LinkContainer } from "react-router-bootstrap"
 import { formatDistance } from "date-fns"
 import axiosClient from "../api"
 import { useContext, useState } from "react"
@@ -11,10 +12,17 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
   const [isBookmarked, setIsBookmarked] = useState(props.bookmarks.length > 0)
   const [likeCount, setLikeCount] = useState(props.likeCount)
+  const history = useHistory()
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
-      <Badge key={tag._id} className="me-2" bg="primary">
+      <Badge
+        key={tag._id}
+        className="me-2"
+        bg="primary"
+        onClick={() => history.push(`/tags/${tag._id}`)}
+        style={{ cursor: "pointer" }}
+      >
         #{tag.title}
       </Badge>
     ))
