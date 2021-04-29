@@ -45,7 +45,7 @@ export const getQuestions = async (
   }
 }
 
-// GEt /api/questions/top
+// GET /api/questions/top
 export const getTopQuestions = async (
   req: Request,
   res: Response,
