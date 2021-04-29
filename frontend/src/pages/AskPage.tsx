@@ -19,6 +19,8 @@ interface QuestionDataInterface {
 
 const AskPage: React.FC = () => {
   const [tags, setTags] = useState<string[]>([])
+  const [isAsking, setIsAsking] = useState<boolean>(false)
+
   const history = useHistory()
   const {
     register,
@@ -82,8 +84,8 @@ const AskPage: React.FC = () => {
                     <AskTagsInput tags={tags} setTags={setTags} />
                   </Form.Group>
 
-                  <Button type="submit" variant="primary">
-                    Ask
+                  <Button type="submit" variant="primary" disabled={isAsking}>
+                    {isAsking ? "Asking..." : "Ask"}
                   </Button>
                 </Form>
               </Card.Body>
