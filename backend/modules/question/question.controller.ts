@@ -168,7 +168,7 @@ export const deleteQuestion = async (
   next: NextFunction
 ) => {
   try {
-    const question = await Question.findByIdAndDelete(req.params.id)
+    const question = await Question.findById(req.params.id)
 
     if (!question) {
       throw new HTTPError("No matching questions found", 404)
@@ -177,6 +177,8 @@ export const deleteQuestion = async (
     if (question.author.toString() !== req.user._id.toString()) {
       throw new HTTPError("Action not allowed", 401)
     }
+
+    await question.remove()
 
     res.send({ success: 1, deleted: 1 })
   } catch (err) {

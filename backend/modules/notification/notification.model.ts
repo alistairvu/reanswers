@@ -4,6 +4,7 @@ interface NotificationSchemaInterface extends mongoose.Document {
   title: string
   body: string
   link: string
+  itemId: mongoose.Types.ObjectId
   subscribers: mongoose.Types.ObjectId[]
 }
 
@@ -29,6 +30,10 @@ const NotificationSchema = new mongoose.Schema(
         },
       ],
       default: [],
+    },
+    itemId: {
+      type: mongoose.Types.ObjectId,
+      required: true,
     },
   },
   {

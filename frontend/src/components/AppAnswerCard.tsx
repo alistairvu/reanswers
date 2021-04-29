@@ -6,6 +6,7 @@ import axiosClient from "../api"
 import UserContext from "../context/userContext"
 
 const AppAnswerCard: React.FC<AnswerInterface> = (props) => {
+  console.log(props)
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
   const [isBookmarked, setIsBookmarked] = useState(props.bookmarks.length > 0)
   const [likeCount, setLikeCount] = useState(props.likeCount)
