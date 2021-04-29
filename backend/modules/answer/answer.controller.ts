@@ -1,8 +1,9 @@
-import { Response, Request } from "express"
+import { Response, Request, NextFunction } from "express"
 import Answer from "./answer.model"
 import Question from "../question/question.model"
 import Notification from "../notification/notification.model"
-import HTTPError from "../../httpError"
+import HTTPError from "../../httpError";
+import mongoose from 'mongoose';
 
 // GET /api/answers/questions/:id
 export const getAnswers = async (req: Request, res: Response, next: any) => {
@@ -43,6 +44,58 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
       answers: answers,
       answerCount: answerCount,
       nextCursor: limit + skip,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
+// GET /api/answers/top/questions/:id
+export const getTopAnswers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
+
+    const questionId = req.params.id
+    const question = Question.findById(questionId)
+    if (!question) {
+      throw new HTTPError("No matching questions found", 404)
+    }
+
+    const [answers, answerCount] = await Promise.all([
+      Answer.aggregate([
+        {
+          $match: { question: mongoose.Types.ObjectId(questionId) },
+        },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "answerId",
+            as: "likeList",
+          },
+        },
+        {
+          $addFields: {
+            likeCount: { $size: "$likeList" },
+          },
+        },
+        {
+          $sort: { likeCount: -1 },
+        },
+      ]),
+      Answer.find({ question: questionId }).countDocuments(),
+    ])
+
+    res.send({
+      success: 1,
+      answers: answers,
+      answerCount: answerCount,
+      nextCursor: skip + limit,
     })
   } catch (err) {
     next(err)
