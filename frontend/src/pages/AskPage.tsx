@@ -72,14 +72,13 @@ const AskPage: React.FC = () => {
                       placeholder="Title"
                       {...register("title", { required: "Please add a title" })}
                     />
-                    {errors.title && <p>{errors.title.message}</p>}
+                    {errors.title && <p className="mt-1" style={{color:"#ebebeb"}}>{errors.title.message}</p>}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="body">
                     <MarkdownEditor
                       height={200}
                       value={markdownText}
-                      className="mb-2"
                       placeholder="Body..."
                       onChange={(editor: any, data: any, value: string) =>
                         setValue("body", value)
@@ -88,7 +87,7 @@ const AskPage: React.FC = () => {
                         required: "Please add some details",
                       })}
                     />
-                    {errors.body && <p>{errors.body.message}</p>}
+                    {errors.body && <p className="mt-1" style={{color:"#ebebeb"}}>{errors.body.message}</p>}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="tags">
