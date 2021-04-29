@@ -33,6 +33,7 @@ const AskPage: React.FC = () => {
 
   const handleAsk = async (questionData: QuestionDataInterface) => {
     console.log({ ...questionData, tags })
+    setIsAsking(true)
     try {
       const { data } = await axiosClient.post("/api/questions", {
         ...questionData,
@@ -41,9 +42,11 @@ const AskPage: React.FC = () => {
       if (data.success) {
         reset()
         setTags([])
+        setIsAsking(false)
         history.push(`/questions/${data.question._id}`)
       }
     } catch (err) {
+      setIsAsking(false)
       console.log(err)
     }
   }
