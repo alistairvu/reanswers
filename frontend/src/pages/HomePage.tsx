@@ -7,7 +7,7 @@ import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
 import { useQuery } from "react-query"
 import axiosClient from "../api"
-import { HomeLatestQuestions } from "../components/home"
+import { HomeLatestQuestions, HomeTopQuestions } from "../components/home"
 
 const HomePage: React.FC = () => {
   const getTopTags = async () => {
@@ -43,7 +43,10 @@ const HomePage: React.FC = () => {
             </ol>
           </Col>
           <Col xs={12} lg={8}>
-            <Tabs defaultActiveKey="latest" id="home-tab" className="mb-2">
+            <Tabs defaultActiveKey="top" id="home-tab" className="mb-2">
+              <Tab eventKey="top" title="Top">
+                <HomeTopQuestions />
+              </Tab>
               <Tab eventKey="latest" title="Latest">
                 <HomeLatestQuestions />
               </Tab>

@@ -18,7 +18,13 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
 
   const renderTagBadges = () => {
     return props.tags.map((tag) => (
-      <Badge key={tag._id} className="me-2" bg="primary">
+      <Badge
+        key={tag._id}
+        className="me-2"
+        bg="primary"
+        onClick={() => history.push(`/tags/${tag._id}`)}
+        style={{ cursor: "pointer" }}
+      >
         #{tag.title}
       </Badge>
     ))

@@ -10,6 +10,7 @@ import {
   SearchPage,
   BookmarkPage,
   SettingsPage,
+  TagPage,
 } from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
 import { useContext, useEffect } from "react"
@@ -61,6 +62,9 @@ const App: React.FC = () => {
         </ProtectedRoute>
         <Route path="/search">
           <SearchPage />
+        </Route>
+        <Route path="/tags/:id">
+          <TagPage />
         </Route>
       </Switch>
     </AppLayout>
