@@ -5,11 +5,14 @@ import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
 import Tabs from "react-bootstrap/Tabs"
 import Tab from "react-bootstrap/Tab"
+import Badge from "react-bootstrap/Badge"
 import { useQuery } from "react-query"
 import axiosClient from "../api"
 import { HomeLatestQuestions, HomeTopQuestions } from "../components/home"
+import { Link, useHistory } from "react-router-dom"
 
 const HomePage: React.FC = () => {
+  const history = useHistory()
   const getTopTags = async () => {
     const { data } = await axiosClient.get("/api/tags/top")
     if (data.success) {
@@ -37,7 +40,17 @@ const HomePage: React.FC = () => {
                 </div>
               ) : (
                 tagData.map((tag: TagInterface) => (
-                  <li key={tag._id}>{tag.title}</li>
+                  <li key={tag._id}>
+                    <Badge
+                      key={tag._id}
+                      className="mb-2"
+                      bg="primary"
+                      onClick={() => history.push(`/tags/${tag._id}`)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      #{tag.title}
+                    </Badge>
+                  </li>
                 ))
               )}
             </ol>
