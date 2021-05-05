@@ -59,7 +59,7 @@ const NotificationsPage: React.FC = () => {
     <>
       <AppHelmet title="Notifications" />
 
-      <Container className="mt-3">
+      <Container className="pt-3">
         <Row>
           <Col xs={12} lg={8}>
             <h1 className="fw-bold">Notifications</h1>

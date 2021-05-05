@@ -10,7 +10,7 @@ const SignupPage: React.FC = () => {
     <>
       <AppHelmet title="Home" />
 
-      <Container className="mt-3">
+      <Container className="pt-3">
         <Row>
           <Col className="d-none d-md-block mt-md-5" md={8}>
             <h1 className="fw-bold">Welcome to the land of curiosity.</h1>
@@ -22,7 +22,7 @@ const SignupPage: React.FC = () => {
           <Col xs={12} md={4}>
             <Card className="shadow">
               <Card.Body>
-                <Card.Title className="fs-2 fw-bold text-center mb-3">
+                <Card.Title className="mb-3 text-center fs-2 fw-bold">
                   Sign Up
                 </Card.Title>
                 <AuthSignUpForm />

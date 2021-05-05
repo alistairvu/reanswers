@@ -40,7 +40,7 @@ const QuestionPage: React.FC = () => {
     <>
       <AppHelmet title={isLoading ? "Question" : questionData.title} />
 
-      <Container className="mt-3">
+      <Container className="pt-3">
         <Row>
           <Col xs={12} lg={8}>
             {isLoading ? (
@@ -57,10 +57,10 @@ const QuestionPage: React.FC = () => {
                 </div>
                 <Tabs defaultActiveKey="top" id="home-tab" className="mb-2">
                   <Tab eventKey="top" title="Top">
-                    <AnswerCardList slug="top"/>
+                    <AnswerCardList slug="top" />
                   </Tab>
                   <Tab eventKey="latest" title="Latest">
-                    <AnswerCardList slug="latest"/>
+                    <AnswerCardList slug="latest" />
                   </Tab>
                 </Tabs>
               </>
