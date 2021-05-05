@@ -31,7 +31,7 @@ const AppSearchBar: React.FC = () => {
           aria-label="Search"
           {...register("keyword")}
         />
-        <Button variant="outline-primary" type="submit">
+        <Button variant="outline-secondary" type="submit">
           Search
         </Button>
       </InputGroup>
