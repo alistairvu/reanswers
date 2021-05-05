@@ -28,7 +28,6 @@ const AskPage: React.FC = () => {
     watch,
     setValue,
     reset,
-    setError,
     formState: { errors },
   } = useForm<QuestionDataInterface>()
   const markdownText = watch("body", "")
@@ -58,7 +57,7 @@ const AskPage: React.FC = () => {
     <>
       <AppHelmet title="Ask" />
 
-      <Container className="mt-3">
+      <Container className="pt-3">
         <Row>
           <Col xs={12} md={{ span: 8, offset: 2 }}>
             <h1>Ask</h1>
@@ -72,7 +71,11 @@ const AskPage: React.FC = () => {
                       placeholder="Title"
                       {...register("title", { required: "Please add a title" })}
                     />
-                    {errors.title && <p className="mt-1" style={{color:"#ebebeb"}}>{errors.title.message}</p>}
+                    {errors.title && (
+                      <p className="mt-1" style={{ color: "#ebebeb" }}>
+                        {errors.title.message}
+                      </p>
+                    )}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="body">
@@ -87,7 +90,11 @@ const AskPage: React.FC = () => {
                         required: "Please add some details",
                       })}
                     />
-                    {errors.body && <p className="mt-1" style={{color:"#ebebeb"}}>{errors.body.message}</p>}
+                    {errors.body && (
+                      <p className="mt-1" style={{ color: "#ebebeb" }}>
+                        {errors.body.message}
+                      </p>
+                    )}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="tags">

@@ -99,7 +99,7 @@ const AppHeader: React.FC = () => {
   }
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+    <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
       <Container>
         <LinkContainer to="/">
           <Navbar.Brand className="fw-bold">reanswer</Navbar.Brand>

@@ -13,7 +13,7 @@ const SearchPage: React.FC = () => {
   return (
     <>
       <AppHelmet title={`Results for ${keyword}`} />
-      <Container className="mt-2">
+      <Container className="pt-2">
         <h1>
           Search results for <em>{keyword}</em>
         </h1>
