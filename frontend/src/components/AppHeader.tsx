@@ -102,7 +102,9 @@ const AppHeader: React.FC = () => {
     <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
       <Container>
         <LinkContainer to="/">
-          <Navbar.Brand className="fw-bold brand-name">reanswer</Navbar.Brand>
+          <Navbar.Brand className="fw-bold brand-name fs-3">
+            reanswer
+          </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">{renderNav()}</Navbar.Collapse>
