@@ -28,7 +28,6 @@ const AskPage: React.FC = () => {
     watch,
     setValue,
     reset,
-    setError,
     formState: { errors },
   } = useForm<QuestionDataInterface>()
   const markdownText = watch("body", "")
