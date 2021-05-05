@@ -6,19 +6,19 @@ import AnswerCard from "./AnswerCard"
 import { useParams } from "react-router-dom"
 import useInfiniteScroll from "../../hooks/useInfiniteScroll"
 
-const AnswerCardList: React.FC = () => {
+const AnswerCardList: React.FC<{ slug : string }> = ({ slug }) => {
   const { id: questionId } = useParams<{ id: string }>()
 
   const getAnswers = async ({ pageParam = 0 }) => {
     const { data } = await axiosClient.get(
-      `/api/answers/question/${questionId}`,
+      `/api/answers/question/${questionId}/${slug}`,
       {
         params: {
           skip: pageParam,
         },
       }
     )
-    console.log(data)
+    console.log(slug, data)
     if (data.success) {
       return data
     }
@@ -29,7 +29,7 @@ const AnswerCardList: React.FC = () => {
     isLoading,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQuery(["answers", questionId], getAnswers, {
+  } = useInfiniteQuery(["answers", questionId, slug], getAnswers, {
     getNextPageParam: (lastPage: any) => {
       if (lastPage.nextCursor > lastPage.answerCount) {
         return false
