@@ -84,7 +84,7 @@ const QuestionCard: React.FC<QuestionInterface> = (props) => {
   return (
     <Card>
       <Card.Body>
-        <Card.Title className="display-6">{props.title}</Card.Title>
+        <Card.Title className="fs-4">{props.title}</Card.Title>
         <Card.Subtitle className="mb-3 text-muted">
           {formatDate()} • Asked by {props.author.username}
         </Card.Subtitle>
