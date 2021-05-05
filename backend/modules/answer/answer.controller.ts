@@ -5,7 +5,7 @@ import Notification from "../notification/notification.model"
 import HTTPError from "../../httpError"
 import mongoose from "mongoose"
 
-// GET /api/answers/questions/:id
+// GET /api/answers/questions/:id/latest
 export const getAnswers = async (req: Request, res: Response, next: any) => {
   try {
     const questionId = req.params.id
@@ -50,7 +50,7 @@ export const getAnswers = async (req: Request, res: Response, next: any) => {
   }
 }
 
-// GET /api/answers/top/questions/:id
+// GET /api/answers/questions/:id/top
 export const getTopAnswers = async (
   req: Request,
   res: Response,

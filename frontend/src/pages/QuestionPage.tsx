@@ -1,6 +1,8 @@
 import Container from "react-bootstrap/Container"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
+import Tabs from "react-bootstrap/Tabs"
+import Tab from "react-bootstrap/Tab"
 import Spinner from "react-bootstrap/Spinner"
 import axiosClient from "../api"
 import { useQuery } from "react-query"
@@ -53,7 +55,14 @@ const QuestionPage: React.FC = () => {
                 <div className="my-4">
                   {user._id ? <AnswerForm /> : <AnswerLoginCard />}
                 </div>
-                <AnswerCardList />
+                <Tabs defaultActiveKey="top" id="home-tab" className="mb-2">
+                  <Tab eventKey="top" title="Top">
+                    <AnswerCardList slug="top"/>
+                  </Tab>
+                  <Tab eventKey="latest" title="Latest">
+                    <AnswerCardList slug="latest"/>
+                  </Tab>
+                </Tabs>
               </>
             )}
           </Col>

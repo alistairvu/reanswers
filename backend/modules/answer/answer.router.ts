@@ -9,8 +9,8 @@ import {
 
 const router = express.Router()
 
-router.route("/question/top/:id").get(checkUser, getTopAnswers)
-router.route("/question/:id").get(checkUser, getAnswers)
+router.route("/question/:id/top").get(checkUser, getTopAnswers)
+router.route("/question/:id/latest").get(checkUser, getAnswers)
 router.route("/").post(protect, createAnswer)
 router.route("/:id").delete(protect, deleteAnswer)
 
