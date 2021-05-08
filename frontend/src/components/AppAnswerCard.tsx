@@ -85,7 +85,7 @@ const AppAnswerCard: React.FC<AnswerInterface> = (props) => {
                   onClick={handleBookmark}
                 />
                 <i
-                  className={`${isLiked ? "fas" : "far"} fa-heart ms-3`}
+                  className={`${isLiked ? "fas" : "far"} fa-heart`}
                   style={{
                     cursor: "pointer",
                     fontSize: "25px",

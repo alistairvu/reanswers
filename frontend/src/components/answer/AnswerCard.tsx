@@ -3,12 +3,16 @@ import Card from "react-bootstrap/Card"
 import { useState, useContext } from "react"
 import axiosClient from "../../api"
 import UserContext from "../../context/userContext"
+import { useQueryClient } from "react-query"
+import { useParams } from "react-router-dom"
 
 const AnswerCard: React.FC<AnswerInterface> = (props) => {
   const [isLiked, setIsLiked] = useState(props.likes.length > 0)
   const [isBookmarked, setIsBookmarked] = useState(props.bookmarks.length > 0)
   const [likeCount, setLikeCount] = useState(props.likeCount)
-  const user = useContext(UserContext)
+  const { user } = useContext(UserContext)
+  const queryClient = useQueryClient()
+  const { id: questionId } = useParams<{ id: string }>()
 
   const handleLike = async () => {
     try {
@@ -42,6 +46,20 @@ const AnswerCard: React.FC<AnswerInterface> = (props) => {
     }
   }
 
+  const handleDelete = async () => {
+    if (window.confirm("Do you really want to delete this answer?")) {
+      try {
+        const { data } = await axiosClient.delete(`/api/answers/${props._id}`)
+        if (data.success) {
+          queryClient.invalidateQueries(["answers", questionId, "top"])
+          queryClient.invalidateQueries(["answers", questionId, "latest"])
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }
+
   return (
     <Card className="mb-1">
       <Card.Body>
@@ -60,7 +78,18 @@ const AnswerCard: React.FC<AnswerInterface> = (props) => {
             {likeCount} {likeCount === 1 ? "like" : "likes"}
           </div>
           <div>
-            {user.user._id && (
+            {user._id.toString() === props.author._id.toString() && (
+              <i
+                className="far fa-trash-alt me-3"
+                style={{
+                  fontSize: "25px",
+                  color: "#adb5bd",
+                  cursor: "pointer",
+                }}
+                onClick={handleDelete}
+              />
+            )}
+            {user._id && (
               <>
                 <i
                   className={`${isBookmarked ? "fas" : "far"} fa-bookmark me-3`}
@@ -72,7 +101,7 @@ const AnswerCard: React.FC<AnswerInterface> = (props) => {
                   onClick={handleBookmark}
                 />
                 <i
-                  className={`${isLiked ? "fas" : "far"} fa-heart ms-3`}
+                  className={`${isLiked ? "fas" : "far"} fa-heart`}
                   style={{
                     cursor: "pointer",
                     fontSize: "25px",

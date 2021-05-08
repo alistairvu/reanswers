@@ -86,15 +86,7 @@ const AskPage: React.FC = () => {
                       onChange={(editor: any, data: any, value: string) =>
                         setValue("body", value)
                       }
-                      {...register("body", {
-                        required: "Please add some details",
-                      })}
                     />
-                    {errors.body && (
-                      <p className="mt-1" style={{ color: "#ebebeb" }}>
-                        {errors.body.message}
-                      </p>
-                    )}
                   </Form.Group>
 
                   <Form.Group className="mb-3" controlId="tags">
