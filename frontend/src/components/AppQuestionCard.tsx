@@ -66,7 +66,7 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   return (
     <Card className="mb-1">
       <Card.Body>
-        <Card.Title className="fs-3">
+        <Card.Title className="fs-5">
           <Link to={`/questions/${props._id}`} className="text-decoration-none">
             {props.title}
           </Link>

@@ -88,6 +88,9 @@ const AppHeader: React.FC = () => {
           }
           id="user-nav-dropdown"
         >
+          <LinkContainer to="/settings">
+            <NavDropdown.Item>Settings</NavDropdown.Item>
+          </LinkContainer>
           <LinkContainer to="/bookmarks">
             <NavDropdown.Item>Bookmarks</NavDropdown.Item>
           </LinkContainer>
@@ -102,8 +105,8 @@ const AppHeader: React.FC = () => {
     <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
       <Container>
         <LinkContainer to="/">
-          <Navbar.Brand className="fw-bold brand-name fs-3">
-            reanswer
+          <Navbar.Brand className="fw-bold brand-name fs-4">
+            reanswers
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
