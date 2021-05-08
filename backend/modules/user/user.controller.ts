@@ -1,6 +1,7 @@
 import User from "./user.model"
 import { Request, Response, NextFunction } from "express"
 import HTTPError from "../../httpError"
+import argon from "argon2"
 
 // GET /api/users/:id
 export const getUserInfo = async (
@@ -29,7 +30,7 @@ export const updateUserInfo = async (
   next: NextFunction
 ) => {
   try {
-    const { username, email } = req.body
+    const { username, email, password } = req.body
     const existingUser = await User.findOne({
       $or: [{ username: username }, { email: email }],
     })
@@ -46,6 +47,11 @@ export const updateUserInfo = async (
 
     user.username = username || user.username
     user.email = email || user.email
+
+    if (password) {
+      const passwordDigest = await argon.hash(password)
+      user.password = passwordDigest
+    }
     await user.save()
 
     res.send({ success: 1, user: user })

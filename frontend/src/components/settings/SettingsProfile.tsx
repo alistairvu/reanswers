@@ -21,7 +21,11 @@ const SettingsProfile: React.FC = () => {
   const [isUpdateSuccess, setIsUpdateSuccess] = useState(false)
   const [updateError, setUpdateError] = useState("")
 
-  const { register, handleSubmit } = useForm<ProfileUpdateInterface>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileUpdateInterface>({
     defaultValues: {
       email: user.email,
       username: user.username,
@@ -29,6 +33,10 @@ const SettingsProfile: React.FC = () => {
   })
 
   const handleUpdate = async (updatedInfo: ProfileUpdateInterface) => {
+    if (updatedInfo.password !== updatedInfo.passwordConfirmation) {
+      return setUpdateError("Passwords must match")
+    }
+
     try {
       setIsUpdating(true)
       setUpdateError("")
@@ -53,12 +61,20 @@ const SettingsProfile: React.FC = () => {
   }
 
   const renderAlert = () => {
-    if (isUpdateSuccess) {
-      return <Alert variant="success">Update successful!</Alert>
+    if (errors.username) {
+      return <Alert variant="danger">{errors.username.message}</Alert>
+    }
+
+    if (errors.email) {
+      return <Alert variant="danger">{errors.email.message}</Alert>
     }
 
     if (updateError) {
       return <Alert variant="danger">{updateError}</Alert>
+    }
+
+    if (isUpdateSuccess) {
+      return <Alert variant="success">Update successful!</Alert>
     }
   }
 
@@ -74,7 +90,9 @@ const SettingsProfile: React.FC = () => {
               <Form.Control
                 type="text"
                 placeholder="Username"
-                {...register("username")}
+                {...register("username", {
+                  required: "You cannot leave a blank username",
+                })}
               />
             </Form.Group>
           </Col>
@@ -85,7 +103,33 @@ const SettingsProfile: React.FC = () => {
               <Form.Control
                 type="email"
                 placeholder="Email"
-                {...register("email")}
+                {...register("email", {
+                  required: "You cannot leave a blank email",
+                })}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col md={{ span: 6 }}>
+            <Form.Group controlId="profileUsername" className="mb-2">
+              <Form.Label>New password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                {...register("password")}
+              />
+            </Form.Group>
+          </Col>
+
+          <Col md={{ span: 6 }}>
+            <Form.Group controlId="profileEmail" className="mb-2">
+              <Form.Label>Confirm new password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Confirm password"
+                {...register("passwordConfirmation")}
               />
             </Form.Group>
           </Col>
