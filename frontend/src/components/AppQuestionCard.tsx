@@ -5,6 +5,7 @@ import { formatDistance } from "date-fns"
 import axiosClient from "../api"
 import { useContext, useState } from "react"
 import UserContext from "../context/userContext"
+import ReactMarkdown from "react-markdown"
 
 const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
   const user = useContext(UserContext)
@@ -78,7 +79,9 @@ const AppQuestionCard: React.FC<QuestionInterface> = (props) => {
           • Asked by {props.author.username}
         </Card.Subtitle>
 
-        <Card.Text className="mt-3">{props.body}</Card.Text>
+        <Card.Text className="mt-3">
+          <ReactMarkdown>{props.body}</ReactMarkdown>
+        </Card.Text>
 
         <div className="tags">{renderTagBadges()}</div>
 
