@@ -88,11 +88,14 @@ const AppHeader: React.FC = () => {
           }
           id="user-nav-dropdown"
         >
-          <LinkContainer to="/settings">
-            <NavDropdown.Item>Settings</NavDropdown.Item>
+          <LinkContainer to="/profile">
+            <NavDropdown.Item>Profile</NavDropdown.Item>
           </LinkContainer>
           <LinkContainer to="/bookmarks">
             <NavDropdown.Item>Bookmarks</NavDropdown.Item>
+          </LinkContainer>
+          <LinkContainer to="/settings">
+            <NavDropdown.Item>Settings</NavDropdown.Item>
           </LinkContainer>
           <NavDropdown.Divider />
           <NavDropdown.Item onClick={handleLogOut}>Log Out</NavDropdown.Item>

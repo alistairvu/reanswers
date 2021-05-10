@@ -72,9 +72,7 @@ const AskPage: React.FC = () => {
                       {...register("title", { required: "Please add a title" })}
                     />
                     {errors.title && (
-                      <p className="mt-1" style={{ color: "#ebebeb" }}>
-                        {errors.title.message}
-                      </p>
+                      <p className="mt-1 text-danger">{errors.title.message}</p>
                     )}
                   </Form.Group>
 
