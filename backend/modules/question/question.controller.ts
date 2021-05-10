@@ -45,6 +45,48 @@ export const getQuestions = async (
   }
 }
 
+// GET /api/questions/user/:id
+export const getQuestionsByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const limit = Number(req.query.limit) || 10
+    const skip = Number(req.query.skip) || 0
+    const userId = req.params.id
+
+    const [questions, questionCount] = await Promise.all([
+      Question.find({ author: userId })
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .select("-__v")
+        .populate("author", "username email")
+        .populate("tags", "title")
+        .populate("likeCount")
+        .populate({
+          path: "likes",
+          match: { userId: req.user ? req.user._id : null },
+        })
+        .populate({
+          path: "bookmarks",
+          match: { userId: req.user ? req.user._id : null },
+        }),
+      Question.find({}).countDocuments(),
+    ])
+
+    res.send({
+      success: 1,
+      questions: questions,
+      questionCount: questionCount,
+      nextCursor: skip + limit,
+    })
+  } catch (err) {
+    next(err)
+  }
+}
+
 // GET /api/questions/top
 export const getTopQuestions = async (
   req: Request,

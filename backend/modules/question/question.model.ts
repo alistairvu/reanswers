@@ -22,7 +22,6 @@ const QuestionSchema = new mongoose.Schema(
     },
     body: {
       type: String,
-      required: true,
     },
     updates: {
       type: String,

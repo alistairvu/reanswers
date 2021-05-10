@@ -11,6 +11,7 @@ import {
   BookmarkPage,
   SettingsPage,
   TagPage,
+  ProfilePage,
 } from "./pages"
 import { GuestRoute, ProtectedRoute } from "./components/routes"
 import { useContext, useEffect } from "react"
@@ -28,6 +29,10 @@ const App: React.FC = () => {
       console.log("Connected!")
     })
   }, [socket])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location])
 
   if (!isLoaded) {
     return <AppLayout />
@@ -59,6 +64,9 @@ const App: React.FC = () => {
         </ProtectedRoute>
         <ProtectedRoute path="/settings">
           <SettingsPage />
+        </ProtectedRoute>
+        <ProtectedRoute path="/profile">
+          <ProfilePage />
         </ProtectedRoute>
         <Route path="/search">
           <SearchPage />
