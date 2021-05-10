@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom"
 import { useQueryClient } from "react-query"
 import MarkdownEditor from "@uiw/react-markdown-editor"
 import axiosClient from "../../api"
+import { useState } from "react"
 
 interface AnswerDataInterface {
   content: string
@@ -21,9 +22,14 @@ const AnswerForm: React.FC = () => {
   const markdownContent = watch("content", "")
   const queryClient = useQueryClient()
   const { id: questionId } = useParams<{ id: string }>()
+  const [isAnswering, setIsAnswering] = useState(false)
 
   const handleAnswer = async (answerData: AnswerDataInterface) => {
     try {
+      setIsAnswering(true)
+      if (!answerData.content) {
+        return window.alert("You must add some text to your answer!")
+      }
       const { data } = await axiosClient.post("/api/answers", {
         ...answerData,
         questionId,
@@ -35,6 +41,8 @@ const AnswerForm: React.FC = () => {
       }
     } catch (err) {
       console.log(err)
+    } finally {
+      setIsAnswering(false)
     }
   }
 
@@ -55,7 +63,7 @@ const AnswerForm: React.FC = () => {
             />
           </Form.Group>
 
-          <Button type="submit" variant="primary">
+          <Button type="submit" variant="primary" disabled={isAnswering}>
             Answer
           </Button>
         </Form>
